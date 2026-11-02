@@ -1,0 +1,47 @@
+[
+  {
+    "id": "S_01",
+    "name": "Coastline Stays",
+    "personality": "firm and businesslike, rarely drops the price, prefers to add small perks instead",
+    "floor_ratio": 0.90,
+    "tradeable": ["free_breakfast"],
+    "patience_rounds": 2,
+    "free_cancellation_days": 3
+  },
+  {
+    "id": "S_02",
+    "name": "Heritage Hospitality",
+    "personality": "warm and flexible, loves long stays and will bundle extras to win them",
+    "floor_ratio": 0.80,
+    "tradeable": ["longer_stay_discount", "free_breakfast", "airport_transfer"],
+    "patience_rounds": 4,
+    "free_cancellation_days": 7
+  },
+  {
+    "id": "S_03",
+    "name": "Palm Group",
+    "personality": "enthusiastic dealmaker who gets generous when you book a package",
+    "floor_ratio": 0.78,
+    "tradeable": ["longer_stay_discount", "airport_transfer", "late_checkout"],
+    "patience_rounds": 4,
+    "free_cancellation_days": 5
+  },
+  {
+    "id": "S_04",
+    "name": "Urban Nest",
+    "personality": "modern and quick, gives discounts for early payment but not for much else",
+    "floor_ratio": 0.85,
+    "tradeable": ["early_payment_discount", "late_checkout"],
+    "patience_rounds": 3,
+    "free_cancellation_days": 2
+  },
+  {
+    "id": "S_05",
+    "name": "Trailhead Experiences",
+    "personality": "friendly local guides who reward groups and repeat bookings",
+    "floor_ratio": 0.82,
+    "tradeable": ["group_discount", "free_upgrade"],
+    "patience_rounds": 3,
+    "free_cancellation_days": 4
+  }
+]

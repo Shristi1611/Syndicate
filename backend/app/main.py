@@ -87,6 +87,24 @@ def items():
     ]
 
 
+@app.get("/hotels")
+def hotels(destination: str | None = None):
+    """Hotels a traveller can swap to. Public fields only, never floor prices."""
+    return [
+        {
+            "id": h["id"],
+            "name": h["name"],
+            "destination": h["destination"],
+            "star": h["star"],
+            "tags": h["tags"],
+            "stairs_free": h["stairs_free"],
+            "list_price": list_price(h),
+        }
+        for h in HOTELS.values()
+        if destination is None or h["destination"] == destination
+    ]
+
+
 @app.get("/personas")
 def personas():
     """Ready-made travellers for the persona switcher."""

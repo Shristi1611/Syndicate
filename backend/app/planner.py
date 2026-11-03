@@ -25,6 +25,20 @@ def _line(item: dict, quantity: int, unit: str) -> dict:
     }
 
 
+def _chosen_hotel(p: TravellerProfile, rooms: int) -> dict:
+    """The traveller picked this hotel. Check it is allowed before using it."""
+    hotel = HOTELS.get(p.hotel_id)
+    if hotel is None:
+        raise ValueError(f"Unknown hotel: {p.hotel_id}")
+    if hotel["destination"] != p.destination:
+        raise ValueError(f"{hotel['name']} is not in {p.destination}")
+    if p.stairs_free and not hotel["stairs_free"]:
+        raise ValueError(f"{hotel['name']} is not step-free")
+    if hotel["rooms_available"] < rooms:
+        raise ValueError(f"{hotel['name']} has only {hotel['rooms_available']} room(s)")
+    return hotel
+
+
 def plan_trip(profile: dict) -> dict:
     """Pick a hotel, a transfer and a few activities that fit the profile. List prices only."""
     p = TravellerProfile(**profile)
@@ -36,21 +50,26 @@ def plan_trip(profile: dict) -> dict:
     rooms = math.ceil(p.travellers / ROOM_CAPACITY)
 
     # --- Hotel ---
-    hotels = [h for h in HOTELS.values() if h["destination"] == p.destination]
-    if p.stairs_free:
-        hotels = [h for h in hotels if h["stairs_free"]]
-    if not hotels:
-        raise ValueError("No hotel matches these needs")
-
-    def hotel_cost(h):
-        return list_price(h) * p.nights * rooms
-
-    affordable = [h for h in hotels if hotel_cost(h) <= p.budget_total * HOTEL_BUDGET_SHARE]
-    if affordable:
-        hotel = max(affordable, key=lambda h: (_overlap(h, p.interests), h["star"], -hotel_cost(h)))
+    if p.hotel_id:
+        hotel = _chosen_hotel(p, rooms)
+        if list_price(hotel) * p.nights * rooms > p.budget_total:
+            notes.append(f"{hotel['name']} alone costs more than your budget.")
     else:
-        hotel = min(hotels, key=hotel_cost)
-        notes.append("No hotel fits comfortably in the budget; showing the cheapest option.")
+        hotels = [h for h in HOTELS.values() if h["destination"] == p.destination]
+        if p.stairs_free:
+            hotels = [h for h in hotels if h["stairs_free"]]
+        if not hotels:
+            raise ValueError("No hotel matches these needs")
+
+        def hotel_cost(h):
+            return list_price(h) * p.nights * rooms
+
+        affordable = [h for h in hotels if hotel_cost(h) <= p.budget_total * HOTEL_BUDGET_SHARE]
+        if affordable:
+            hotel = max(affordable, key=lambda h: (_overlap(h, p.interests), h["star"], -hotel_cost(h)))
+        else:
+            hotel = min(hotels, key=hotel_cost)
+            notes.append("No hotel fits comfortably in the budget; showing the cheapest option.")
 
     items = [_line(hotel, p.nights * rooms, "room-night")]
     spent = items[0]["total"]

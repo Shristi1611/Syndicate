@@ -43,6 +43,8 @@ def apply_updates(profile: TravellerProfile, updates: dict) -> TravellerProfile:
             if value not in DESTINATIONS:
                 continue
             candidate[key] = value
+            if value != data["destination"]:
+                candidate["hotel_id"] = None  # a swapped hotel belongs to the old destination
         elif key == "interests":
             if not isinstance(value, list):
                 continue

@@ -10,6 +10,7 @@ class TravellerProfile(BaseModel):
     budget_total: int | None = Field(default=None, gt=0)  # whole trip, in rupees
     stairs_free: bool = False       # needs step-free hotels and activities
     interests: list[str] = Field(default_factory=list)  # e.g. ["quiet", "heritage", "food"]
+    hotel_id: str | None = None     # set when the traveller picks a specific hotel on the map
 
 
 # Fields we must know before planning, in the order we ask about them.

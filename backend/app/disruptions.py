@@ -5,11 +5,13 @@ import uuid
 from contextlib import closing
 
 from app.bookings import _booked_rooms, _connect
+from app.guard import check_offer
 from app.inventory import HOTELS, get_item, list_price
 from app.negotiation import negotiate
 
 RAIN_TAGS = {"beachfront", "water", "adventure"}  # activities that heavy rain ruins
 MAX_ALTERNATIVES = 2
+PROPOSAL_TTL_SECONDS = 15 * 60  # options must be approved within 15 minutes
 
 EVENT_TEXT = {
     "hotel_overbooked": "Your hotel has overbooked and cannot honour your reservation.",
@@ -17,9 +19,11 @@ EVENT_TEXT = {
     "flight_cancelled": "Your flight was cancelled, so your arrival is delayed.",
 }
 
+NO_LONGER_APPLIES = "This option no longer applies to your booking"
+
 
 def _ensure(conn: sqlite3.Connection) -> None:
-    conn.execute(
+    conn.executescript(
         """
         CREATE TABLE IF NOT EXISTS proposals (
             id TEXT PRIMARY KEY,
@@ -28,18 +32,24 @@ def _ensure(conn: sqlite3.Connection) -> None:
             options TEXT NOT NULL,
             status TEXT NOT NULL,
             created REAL NOT NULL
-        )
+        );
+        CREATE TABLE IF NOT EXISTS applied_changes (
+            proposal_id TEXT PRIMARY KEY,
+            option_id TEXT NOT NULL,
+            result TEXT NOT NULL,
+            created REAL NOT NULL
+        );
         """
     )
 
 
-def _load(conn: sqlite3.Connection, booking_id: str) -> dict:
+def _load_booking(conn: sqlite3.Connection, booking_id: str):
     row = conn.execute("SELECT * FROM bookings WHERE id = ?", (booking_id,)).fetchone()
     if row is None:
         raise LookupError(f"Unknown booking: {booking_id}")
     if row["status"] != "confirmed":
         raise ValueError("Only a confirmed booking can be changed")
-    return json.loads(row["trip"])
+    return row, json.loads(row["trip"])
 
 
 def _option(option_id: str, label: str, cost_delta: int, **extra) -> dict:
@@ -57,9 +67,40 @@ def _lines(trip: dict, category: str) -> list[dict]:
     return [line for line in trip["items"] if line["category"] == category]
 
 
+def _hotel_line(trip: dict, movable: bool = False) -> dict:
+    hotels = _lines(trip, "hotel")
+    if not hotels:
+        raise ValueError("This trip has no hotel to change")
+    if movable and _lines(trip, "hotel_extra"):
+        raise ValueError(
+            "Extra nights were added to this stay, so it can no longer be changed "
+            "automatically. A human agent needs to handle it."
+        )
+    return hotels[0]
+
+
+def _rain_affected(trip: dict) -> list[dict]:
+    return [
+        line
+        for line in trip["items"]
+        if line["category"] not in ("hotel", "hotel_extra", "transfer")
+        and (line["category"] == "adventure" or RAIN_TAGS & set(get_item(line["item_id"]).get("tags", [])))
+    ]
+
+
+def _guard(item_id: str, price: int) -> None:
+    """The same Rules Guard that checks every supplier offer checks every new price."""
+    result = check_offer(item_id, {"price": price, "perks": []}, 1)
+    if not result.ok:
+        raise ValueError("; ".join(result.violations))
+
+
+# ---------------------------------------------------------------- proposing
+
+
 def _hotel_overbooked(conn: sqlite3.Connection, trip: dict):
     profile = trip["profile"]
-    hotel = _lines(trip, "hotel")[0]
+    hotel = _hotel_line(trip, movable=True)
     rooms = hotel["quantity"] // profile["nights"]
     current = get_item(hotel["item_id"])
 
@@ -99,12 +140,7 @@ def _hotel_overbooked(conn: sqlite3.Connection, trip: dict):
 
 
 def _heavy_rain(conn: sqlite3.Connection, trip: dict):
-    affected = [
-        line
-        for line in trip["items"]
-        if line["category"] not in ("hotel", "transfer")
-        and (line["category"] == "adventure" or RAIN_TAGS & set(get_item(line["item_id"]).get("tags", [])))
-    ]
+    affected = _rain_affected(trip)
     if not affected:
         raise ValueError("Nothing in this trip is affected by heavy rain")
 
@@ -126,7 +162,7 @@ def _flight_cancelled(conn: sqlite3.Connection, trip: dict):
     if not transfers:
         raise ValueError("This trip has no airport transfers to change")
 
-    hotel = _lines(trip, "hotel")[0]
+    hotel = _hotel_line(trip)
     rooms = hotel["quantity"] // trip["profile"]["nights"]
     unit = _best_price(hotel["item_id"])
 
@@ -167,7 +203,7 @@ def propose(booking_id: str, event: str) -> dict:
 
     with closing(_connect()) as conn:
         _ensure(conn)
-        trip = _load(conn, booking_id)
+        _, trip = _load_booking(conn, booking_id)
         affected, options = BUILDERS[event](conn, trip)
 
         proposal_id = "P-" + uuid.uuid4().hex[:8].upper()
@@ -187,3 +223,155 @@ def propose(booking_id: str, event: str) -> dict:
         "options": options,
         "requires_confirmation": True,
     }
+
+
+# ----------------------------------------------------------------- applying
+
+
+def _change(conn: sqlite3.Connection, booking_id: str, trip: dict, option_id: str, option: dict) -> None:
+    """Apply one option to the trip and to the room stock. Raises if it no longer applies."""
+    items = trip["items"]
+    nights = trip["profile"]["nights"]
+
+    if option_id in ("keep_all", "reschedule"):
+        return  # nothing to change in the booking itself
+
+    if option_id == "cancel_affected":
+        ids = {line["item_id"] for line in _rain_affected(trip)}
+        if not ids:
+            raise ValueError(NO_LONGER_APPLIES)
+        trip["items"] = [line for line in items if line["item_id"] not in ids]
+        return
+
+    if option_id == "cancel_transfers":
+        if not _lines(trip, "transfer"):
+            raise ValueError(NO_LONGER_APPLIES)
+        trip["items"] = [line for line in items if line["category"] != "transfer"]
+        return
+
+    if option_id == "cancel_hotel":
+        hotel = _hotel_line(trip, movable=True)
+        trip["items"] = [line for line in items if line is not hotel]
+        conn.execute(
+            "UPDATE booking_items SET status = 'cancelled' WHERE booking_id = ? AND item_id = ?",
+            (booking_id, hotel["item_id"]),
+        )
+        return
+
+    if option_id == "reschedule_extra_night":
+        hotel = _hotel_line(trip)
+        rooms = hotel["quantity"] // nights
+        unit = option["new_unit_price"]
+        _guard(hotel["item_id"], unit)
+        listed = list_price(get_item(hotel["item_id"]))
+        items.append(
+            {
+                "item_id": hotel["item_id"],
+                "name": f"Extra night: {hotel['name']}",
+                "category": "hotel_extra",
+                "unit": hotel["unit"],
+                "unit_price": listed,
+                "quantity": rooms,
+                "total": listed * rooms,
+                "final_unit_price": unit,
+                "final_total": unit * rooms,
+                "perks": [],
+            }
+        )
+        return
+
+    if option_id.startswith("move:"):
+        new_id = option_id.split(":", 1)[1]
+        new = HOTELS.get(new_id)
+        if new is None:
+            raise ValueError(NO_LONGER_APPLIES)
+
+        hotel = _hotel_line(trip, movable=True)
+        rooms = hotel["quantity"] // nights
+        if trip["profile"]["stairs_free"] and not new["stairs_free"]:
+            raise ValueError(f"{new['name']} is not step-free")
+        if new["rooms_available"] - _booked_rooms(conn, new_id) < rooms:
+            raise ValueError(f"{new['name']} no longer has enough rooms")
+
+        unit = option["new_unit_price"]
+        _guard(new_id, unit)
+        listed = list_price(new)
+        new_line = {
+            "item_id": new_id,
+            "name": new["name"],
+            "category": "hotel",
+            "unit": hotel["unit"],
+            "unit_price": listed,
+            "quantity": hotel["quantity"],
+            "total": listed * hotel["quantity"],
+            "final_unit_price": unit,
+            "final_total": unit * hotel["quantity"],
+            "perks": [],
+        }
+        trip["items"] = [new_line if line is hotel else line for line in items]
+
+        conn.execute(
+            "UPDATE booking_items SET status = 'cancelled' WHERE booking_id = ? AND item_id = ?",
+            (booking_id, hotel["item_id"]),
+        )
+        conn.execute(
+            "INSERT INTO booking_items (booking_id, item_id, rooms, status) VALUES (?, ?, ?, 'confirmed')",
+            (booking_id, new_id, rooms),
+        )
+        return
+
+    raise ValueError(f"Unknown option: {option_id}")
+
+
+def apply_option(booking_id: str, proposal_id: str, option_id: str) -> dict:
+    """The traveller's approval: apply one option. Applying the same option twice is safe."""
+    with closing(_connect()) as conn:
+        _ensure(conn)
+        conn.execute("BEGIN IMMEDIATE")  # lock so two requests cannot change the booking at once
+
+        proposal = conn.execute("SELECT * FROM proposals WHERE id = ?", (proposal_id,)).fetchone()
+        if proposal is None or proposal["booking_id"] != booking_id:
+            raise LookupError(f"Unknown proposal: {proposal_id}")
+
+        done = conn.execute(
+            "SELECT * FROM applied_changes WHERE proposal_id = ?", (proposal_id,)
+        ).fetchone()
+        if done is not None:
+            if done["option_id"] != option_id:
+                raise ValueError("This disruption was already resolved with a different option")
+            return {**json.loads(done["result"]), "already_applied": True}
+
+        if time.time() - proposal["created"] > PROPOSAL_TTL_SECONDS:
+            raise ValueError("These options have expired. Please check the disruption again.")
+
+        options = {o["option_id"]: o for o in json.loads(proposal["options"])}
+        if option_id not in options:
+            raise ValueError(f"Unknown option: {option_id}")
+
+        row, trip = _load_booking(conn, booking_id)
+        old_total = row["total"]
+        _change(conn, booking_id, trip, option_id, options[option_id])
+        new_total = sum(line["final_total"] for line in trip["items"])
+
+        conn.execute(
+            "UPDATE bookings SET trip = ?, total = ? WHERE id = ?",
+            (json.dumps(trip), new_total, booking_id),
+        )
+        result = {
+            "booking_id": booking_id,
+            "proposal_id": proposal_id,
+            "event": proposal["event"],
+            "option_id": option_id,
+            "label": options[option_id]["label"],
+            "old_total": old_total,
+            "new_total": new_total,
+            "cost_delta": new_total - old_total,
+            "within_budget": new_total <= trip["profile"]["budget_total"],
+        }
+        conn.execute(
+            "INSERT INTO applied_changes (proposal_id, option_id, result, created) VALUES (?, ?, ?, ?)",
+            (proposal_id, option_id, json.dumps(result), time.time()),
+        )
+        conn.commit()
+
+    return {**result, "already_applied": False}

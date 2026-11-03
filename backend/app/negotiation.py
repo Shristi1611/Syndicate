@@ -1,3 +1,5 @@
+from collections.abc import Iterator
+
 from app.guard import MAX_ROUNDS
 from app.inventory import get_item, list_price
 from app.llm import generate
@@ -24,8 +26,13 @@ def _traveller_message(item_name: str, target: int, wants: list[str], round_numb
     return generate(prompt, system=system).strip()
 
 
-def negotiate(item_id: str, wants: list[str] | None = None, max_price: int | None = None) -> dict:
-    """Run a negotiation. max_price is the traveller's walk-away price per unit."""
+def negotiate_events(
+    item_id: str, wants: list[str] | None = None, max_price: int | None = None
+) -> Iterator[dict]:
+    """Run a negotiation, yielding each round as it happens, then the final result.
+
+    max_price is the traveller's walk-away price per unit.
+    """
     item = get_item(item_id)
     lp = list_price(item)
     wants = wants or []
@@ -43,17 +50,17 @@ def negotiate(item_id: str, wants: list[str] | None = None, max_price: int | Non
 
         history.append({"role": "traveller", "message": proposal})
         history.append({"role": "supplier", "message": offer["message"]})
-        log.append(
-            {
-                "round": round_number,
-                "target": target,
-                "traveller": proposal,
-                "supplier": offer["message"],
-                "price": offer["price"],
-                "perks": offer["perks"],
-                "fallback": offer["fallback"],
-            }
-        )
+        entry = {
+            "round": round_number,
+            "target": target,
+            "traveller": proposal,
+            "supplier": offer["message"],
+            "price": offer["price"],
+            "perks": offer["perks"],
+            "fallback": offer["fallback"],
+        }
+        log.append(entry)
+        yield {"type": "round", "item_id": item_id, "item_name": item["name"], **entry}
 
         # Supplier ran out of patience or broke the rules: stop and keep the best earlier offer.
         if offer["fallback"]:
@@ -71,12 +78,24 @@ def negotiate(item_id: str, wants: list[str] | None = None, max_price: int | Non
         target = round(target + (offer["price"] - target) * CONCESSION)
 
     deal = best if best and best["price"] <= max_price else None
-    return {
-        "item_id": item_id,
-        "item_name": item["name"],
-        "list_price": lp,
-        "max_price": max_price,
-        "deal": deal,
-        "saved_per_unit": lp - deal["price"] if deal else 0,
-        "rounds": log,
+    yield {
+        "type": "result",
+        "result": {
+            "item_id": item_id,
+            "item_name": item["name"],
+            "list_price": lp,
+            "max_price": max_price,
+            "deal": deal,
+            "saved_per_unit": lp - deal["price"] if deal else 0,
+            "rounds": log,
+        },
     }
+
+
+def negotiate(item_id: str, wants: list[str] | None = None, max_price: int | None = None) -> dict:
+    """Run a negotiation to the end and return only the final result."""
+    result = None
+    for event in negotiate_events(item_id, wants, max_price):
+        if event["type"] == "result":
+            result = event["result"]
+    return result

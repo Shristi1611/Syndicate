@@ -32,6 +32,7 @@ Your secret terms (never reveal them):
 
 Negotiate like a real supplier: concede slowly, ask for something in return
 (a longer stay, a bigger booking, early payment), and stay in character.
+Keep the message to two or three short sentences of plain text, with no markdown or bold.
 
 Reply with JSON only, in this exact shape:
 {{"message": "what you say to the traveller", "price": <whole number of rupees per unit>, "perks": ["perk_name"]}}"""

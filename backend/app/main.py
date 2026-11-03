@@ -11,6 +11,7 @@ from app.chat import chat_turn
 from app.config import settings
 from app.disruptions import apply_option, propose
 from app.inventory import ACTIVITIES, HOTELS, get_item, list_price
+from app.llm import status as llm_status
 from app.negotiation import negotiate
 from app.personas import get_persona, list_personas
 from app.planner import plan_trip
@@ -70,6 +71,7 @@ def health():
         "status": "ok",
         "llm_provider": settings.llm_provider,
         "llm_key_configured": bool(settings.llm_api_key),
+        "llm_calls": llm_status(),
     }
 
 
@@ -167,7 +169,7 @@ def trip_stream(req: ProfileRequest, delay: float = Query(default=0, ge=0, le=3)
                 yield f"data: {json.dumps(event)}\n\n"
                 if delay:
                     time.sleep(delay)
-        except Exception as exc:  # e.g. the model hit a rate limit mid-negotiation
+        except Exception as exc:  # e.g. a setup mistake such as a missing API key
             yield f"data: {json.dumps({'type': 'error', 'message': str(exc)[:200]})}\n\n"
 
     return StreamingResponse(

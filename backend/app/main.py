@@ -6,6 +6,8 @@ from app.chat import chat_turn
 from app.config import settings
 from app.inventory import ACTIVITIES, HOTELS, get_item, list_price
 from app.negotiation import negotiate
+from app.planner import plan_trip
+from app.trip import negotiate_plan
 
 app = FastAPI(title="Syndicate", version="0.1.0")
 
@@ -27,6 +29,10 @@ class NegotiateRequest(BaseModel):
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=500)
     profile: dict = Field(default_factory=dict)
+
+
+class ProfileRequest(BaseModel):
+    profile: dict
 
 
 @app.get("/health")
@@ -65,4 +71,22 @@ def chat(req: ChatRequest):
     try:
         return chat_turn(req.message, req.profile)
     except ValueError as exc:  # profile sent by the client failed validation
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/plan")
+def plan(req: ProfileRequest):
+    """Pick hotel, transfer and activities at list prices. No negotiation, no model calls."""
+    try:
+        return plan_trip(req.profile)
+    except ValueError as exc:  # incomplete or invalid profile
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/trip")
+def trip(req: ProfileRequest):
+    """Plan the trip, negotiate every item, and return the savings."""
+    try:
+        return negotiate_plan(req.profile)
+    except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))

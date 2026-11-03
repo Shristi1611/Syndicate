@@ -1,0 +1,41 @@
+[
+  {
+    "id": "honeymoon",
+    "name": "Honeymoon couple",
+    "tagline": "Privacy, views and a touch of luxury",
+    "profile": {
+      "destination": "Goa",
+      "nights": 4,
+      "travellers": 2,
+      "budget_total": 150000,
+      "stairs_free": false,
+      "interests": ["romantic", "luxury", "beachfront"]
+    }
+  },
+  {
+    "id": "family",
+    "name": "Family with a grandmother",
+    "tagline": "Step-free, relaxed and good food",
+    "profile": {
+      "destination": "Goa",
+      "nights": 5,
+      "travellers": 5,
+      "budget_total": 150000,
+      "stairs_free": true,
+      "interests": ["family", "food", "quiet"]
+    }
+  },
+  {
+    "id": "backpacker",
+    "name": "Solo budget backpacker",
+    "tagline": "Cheapest beds and lively nights",
+    "profile": {
+      "destination": "Goa",
+      "nights": 5,
+      "travellers": 1,
+      "budget_total": 40000,
+      "stairs_free": false,
+      "interests": ["lively", "nightlife", "budget"]
+    }
+  }
+]

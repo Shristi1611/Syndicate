@@ -12,6 +12,7 @@ from app.config import settings
 from app.disruptions import apply_option, propose
 from app.inventory import ACTIVITIES, HOTELS, get_item, list_price
 from app.negotiation import negotiate
+from app.personas import get_persona, list_personas
 from app.planner import plan_trip
 from app.postbooking import cancel_confirm, cancel_preview
 from app.trip import negotiate_plan, negotiate_plan_events
@@ -84,6 +85,20 @@ def items():
         }
         for i in [*HOTELS.values(), *ACTIVITIES.values()]
     ]
+
+
+@app.get("/personas")
+def personas():
+    """Ready-made travellers for the persona switcher."""
+    return list_personas()
+
+
+@app.get("/personas/{persona_id}")
+def persona(persona_id: str):
+    try:
+        return get_persona(persona_id)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
 
 
 @app.post("/negotiate")

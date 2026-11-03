@@ -1,6 +1,28 @@
+import re
+
 from app.config import settings
 
 _client = None
+
+
+def _mock(prompt: str, system: str) -> str:
+    """Free, instant, offline stand-in for a real model. Used for testing and demo fallback."""
+    if "Reply with JSON only" in system:  # supplier agent
+        list_price = int(re.search(r"List price: (\d+)", system).group(1))
+        floor = int(re.search(r"lowest price is (\d+)", system).group(1))
+        perks = re.search(r"willing to give: (.+?)\. Offer", system).group(1).split(", ")
+        rnd = int(re.search(r"Negotiation round (\d+)", prompt).group(1))
+        price = max(floor, round(list_price * (1 - 0.07 * rnd), -1))
+        perk = perks[0]
+        message = f"I can do {int(price)} rupees per unit with {perk.replace('_', ' ')} included."
+        return (
+            '{"message": "' + message + '", "price": ' + str(int(price))
+            + ', "perks": ["' + perk + '"]}'
+        )
+
+    # traveller agent
+    target = re.search(r"Ask for (\d+) rupees", prompt).group(1)
+    return f"We would like {target} rupees per unit with the requested perks, please."
 
 
 def _get_client():
@@ -31,7 +53,11 @@ def generate(prompt: str, system: str = "", strong: bool = False) -> str:
 
     strong=False uses the cheap, fast model (for haggling).
     strong=True uses the stronger model (for final itineraries).
+    Set LLM_PROVIDER=mock to run with no API calls at all.
     """
+    if settings.llm_provider == "mock":
+        return _mock(prompt, system)
+
     model = settings.llm_strong_model if strong else settings.llm_fast_model
     if not model:
         raise RuntimeError("LLM_FAST_MODEL / LLM_STRONG_MODEL is not set in .env")

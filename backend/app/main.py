@@ -6,11 +6,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
+from app.bookings import confirm_quote, create_quote, get_booking
 from app.chat import chat_turn
 from app.config import settings
 from app.inventory import ACTIVITIES, HOTELS, get_item, list_price
 from app.negotiation import negotiate
 from app.planner import plan_trip
+from app.postbooking import cancel_confirm, cancel_preview
 from app.trip import negotiate_plan, negotiate_plan_events
 
 app = FastAPI(title="Syndicate", version="0.1.0")
@@ -37,6 +39,18 @@ class ChatRequest(BaseModel):
 
 class ProfileRequest(BaseModel):
     profile: dict
+
+
+class QuoteRequest(BaseModel):
+    trip: dict
+
+
+class ConfirmRequest(BaseModel):
+    quote_id: str = Field(min_length=1, max_length=40)
+
+
+class CancelRequest(BaseModel):
+    days_before_trip: int = Field(ge=0, le=365)
 
 
 @app.get("/health")
@@ -118,3 +132,54 @@ def trip_stream(req: ProfileRequest, delay: float = Query(default=0, ge=0, le=3)
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+@app.post("/book/quote")
+def book_quote(req: QuoteRequest):
+    """Step 1: re-validate prices and stock on the server and hold a quote. Nothing is booked."""
+    try:
+        return create_quote(req.trip)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/book/confirm")
+def book_confirm(req: ConfirmRequest):
+    """Step 2: the user's explicit approval. Confirming the same quote twice is safe."""
+    try:
+        return confirm_quote(req.quote_id)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.get("/bookings/{booking_id}")
+def booking(booking_id: str):
+    """Retrieve a booking confirmation and voucher."""
+    try:
+        return get_booking(booking_id)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+@app.post("/bookings/{booking_id}/cancel/preview")
+def booking_cancel_preview(booking_id: str, req: CancelRequest):
+    """Step 1: show what a cancellation would refund. Changes nothing."""
+    try:
+        return cancel_preview(booking_id, req.days_before_trip)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/bookings/{booking_id}/cancel/confirm")
+def booking_cancel_confirm(booking_id: str, req: CancelRequest):
+    """Step 2: the user's explicit approval. Cancelling twice is safe."""
+    try:
+        return cancel_confirm(booking_id, req.days_before_trip)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))

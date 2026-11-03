@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from app.bookings import confirm_quote, create_quote, get_booking
 from app.chat import chat_turn
 from app.config import settings
+from app.disruptions import apply_option, propose
 from app.inventory import ACTIVITIES, HOTELS, get_item, list_price
 from app.negotiation import negotiate
 from app.planner import plan_trip
@@ -51,6 +52,15 @@ class ConfirmRequest(BaseModel):
 
 class CancelRequest(BaseModel):
     days_before_trip: int = Field(ge=0, le=365)
+
+
+class DisruptionRequest(BaseModel):
+    event: str = Field(min_length=1, max_length=40)
+
+
+class ApplyRequest(BaseModel):
+    proposal_id: str = Field(min_length=1, max_length=40)
+    option_id: str = Field(min_length=1, max_length=60)
 
 
 @app.get("/health")
@@ -179,6 +189,28 @@ def booking_cancel_confirm(booking_id: str, req: CancelRequest):
     """Step 2: the user's explicit approval. Cancelling twice is safe."""
     try:
         return cancel_confirm(booking_id, req.days_before_trip)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/bookings/{booking_id}/disruption")
+def booking_disruption(booking_id: str, req: DisruptionRequest):
+    """Step 1: a disruption happened. Return the options and their cost. Changes nothing."""
+    try:
+        return propose(booking_id, req.event)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/bookings/{booking_id}/disruption/apply")
+def booking_disruption_apply(booking_id: str, req: ApplyRequest):
+    """Step 2: the traveller's approval of one option. Applying the same option twice is safe."""
+    try:
+        return apply_option(booking_id, req.proposal_id, req.option_id)
     except LookupError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
     except ValueError as exc:

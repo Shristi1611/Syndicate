@@ -1,5 +1,9 @@
-from fastapi import FastAPI, HTTPException
+import json
+import time
+
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from app.chat import chat_turn
@@ -7,7 +11,7 @@ from app.config import settings
 from app.inventory import ACTIVITIES, HOTELS, get_item, list_price
 from app.negotiation import negotiate
 from app.planner import plan_trip
-from app.trip import negotiate_plan
+from app.trip import negotiate_plan, negotiate_plan_events
 
 app = FastAPI(title="Syndicate", version="0.1.0")
 
@@ -90,3 +94,27 @@ def trip(req: ProfileRequest):
         return negotiate_plan(req.profile)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.post("/trip/stream")
+def trip_stream(req: ProfileRequest, delay: float = Query(default=0, ge=0, le=3)):
+    """Same as /trip, but sends each negotiation round to the client as it happens (SSE)."""
+    try:
+        plan_trip(req.profile)  # validate up front so bad input is a clean 422, not a broken stream
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+    def events():
+        try:
+            for event in negotiate_plan_events(req.profile):
+                yield f"data: {json.dumps(event)}\n\n"
+                if delay:
+                    time.sleep(delay)
+        except Exception as exc:  # e.g. the model hit a rate limit mid-negotiation
+            yield f"data: {json.dumps({'type': 'error', 'message': str(exc)[:200]})}\n\n"
+
+    return StreamingResponse(
+        events(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )

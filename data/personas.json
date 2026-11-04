@@ -9,7 +9,11 @@
       "travellers": 2,
       "budget_total": 150000,
       "stairs_free": false,
-      "interests": ["romantic", "luxury", "beachfront"]
+      "interests": [
+        "romantic",
+        "luxury",
+        "beachfront"
+      ]
     }
   },
   {
@@ -22,7 +26,11 @@
       "travellers": 5,
       "budget_total": 150000,
       "stairs_free": true,
-      "interests": ["family", "food", "quiet"]
+      "interests": [
+        "family",
+        "food",
+        "quiet"
+      ]
     }
   },
   {
@@ -35,7 +43,11 @@
       "travellers": 1,
       "budget_total": 40000,
       "stairs_free": false,
-      "interests": ["lively", "nightlife", "budget"]
+      "interests": [
+        "lively",
+        "nightlife",
+        "budget"
+      ]
     }
   }
 ]

@@ -3,8 +3,10 @@
     "id": "S_01",
     "name": "Coastline Stays",
     "personality": "firm and businesslike, rarely drops the price, prefers to add small perks instead",
-    "floor_ratio": 0.90,
-    "tradeable": ["free_breakfast"],
+    "floor_ratio": 0.9,
+    "tradeable": [
+      "free_breakfast"
+    ],
     "patience_rounds": 2,
     "free_cancellation_days": 3
   },
@@ -12,8 +14,12 @@
     "id": "S_02",
     "name": "Heritage Hospitality",
     "personality": "warm and flexible, loves long stays and will bundle extras to win them",
-    "floor_ratio": 0.80,
-    "tradeable": ["longer_stay_discount", "free_breakfast", "airport_transfer"],
+    "floor_ratio": 0.8,
+    "tradeable": [
+      "longer_stay_discount",
+      "free_breakfast",
+      "airport_transfer"
+    ],
     "patience_rounds": 4,
     "free_cancellation_days": 7
   },
@@ -22,7 +28,11 @@
     "name": "Palm Group",
     "personality": "enthusiastic dealmaker who gets generous when you book a package",
     "floor_ratio": 0.78,
-    "tradeable": ["longer_stay_discount", "airport_transfer", "late_checkout"],
+    "tradeable": [
+      "longer_stay_discount",
+      "airport_transfer",
+      "late_checkout"
+    ],
     "patience_rounds": 4,
     "free_cancellation_days": 5
   },
@@ -31,17 +41,179 @@
     "name": "Urban Nest",
     "personality": "modern and quick, gives discounts for early payment but not for much else",
     "floor_ratio": 0.85,
-    "tradeable": ["early_payment_discount", "late_checkout"],
+    "tradeable": [
+      "early_payment_discount",
+      "late_checkout"
+    ],
     "patience_rounds": 3,
     "free_cancellation_days": 2
   },
   {
     "id": "S_05",
+    "name": "Summit Hospitality",
+    "personality": "practical hill specialists who reward multi-night stays",
+    "floor_ratio": 0.83,
+    "tradeable": [
+      "longer_stay_discount",
+      "free_breakfast"
+    ],
+    "patience_rounds": 3,
+    "free_cancellation_days": 6
+  },
+  {
+    "id": "S_06",
+    "name": "Riverbend Resorts",
+    "personality": "relaxed and generous, especially for travellers who are flexible on dates",
+    "floor_ratio": 0.76,
+    "tradeable": [
+      "free_upgrade",
+      "longer_stay_discount",
+      "free_breakfast"
+    ],
+    "patience_rounds": 4,
+    "free_cancellation_days": 8
+  },
+  {
+    "id": "S_07",
+    "name": "Crown and Court Hotels",
+    "personality": "formal and premium, rarely discounts and protects its rates",
+    "floor_ratio": 0.91,
+    "tradeable": [
+      "late_checkout",
+      "free_upgrade"
+    ],
+    "patience_rounds": 2,
+    "free_cancellation_days": 10
+  },
+  {
+    "id": "S_08",
+    "name": "Monsoon Stays",
+    "personality": "chatty and generous with perks but firm on the headline price",
+    "floor_ratio": 0.88,
+    "tradeable": [
+      "free_breakfast",
+      "airport_transfer",
+      "late_checkout"
+    ],
+    "patience_rounds": 3,
+    "free_cancellation_days": 4
+  },
+  {
+    "id": "S_09",
+    "name": "Lotus Collection",
+    "personality": "boutique curator who rewards early commitment",
+    "floor_ratio": 0.82,
+    "tradeable": [
+      "free_upgrade",
+      "early_payment_discount"
+    ],
+    "patience_rounds": 3,
+    "free_cancellation_days": 5
+  },
+  {
+    "id": "S_10",
+    "name": "Backroads Lodging",
+    "personality": "budget-friendly and a hard haggler who respects a firm counter",
+    "floor_ratio": 0.74,
+    "tradeable": [
+      "longer_stay_discount",
+      "group_discount"
+    ],
+    "patience_rounds": 4,
+    "free_cancellation_days": 2
+  },
+  {
+    "id": "S_11",
     "name": "Trailhead Experiences",
     "personality": "friendly local guides who reward groups and repeat bookings",
     "floor_ratio": 0.82,
-    "tradeable": ["group_discount", "free_upgrade"],
+    "tradeable": [
+      "group_discount",
+      "free_upgrade"
+    ],
     "patience_rounds": 3,
     "free_cancellation_days": 4
+  },
+  {
+    "id": "S_12",
+    "name": "Wayfarer Tours",
+    "personality": "efficient operator who likes simple, clean deals",
+    "floor_ratio": 0.85,
+    "tradeable": [
+      "group_discount",
+      "early_payment_discount"
+    ],
+    "patience_rounds": 3,
+    "free_cancellation_days": 3
+  },
+  {
+    "id": "S_13",
+    "name": "Local Roots",
+    "personality": "community-run and fair, will trade a discount for a bigger group",
+    "floor_ratio": 0.79,
+    "tradeable": [
+      "group_discount"
+    ],
+    "patience_rounds": 4,
+    "free_cancellation_days": 5
+  },
+  {
+    "id": "S_14",
+    "name": "Skyline Adventures",
+    "personality": "thrill specialists with premium pricing and little patience",
+    "floor_ratio": 0.88,
+    "tradeable": [
+      "early_payment_discount",
+      "free_upgrade"
+    ],
+    "patience_rounds": 2,
+    "free_cancellation_days": 3
+  },
+  {
+    "id": "S_15",
+    "name": "Spice Route Culinary",
+    "personality": "food lovers who get flexible when guests are enthusiastic",
+    "floor_ratio": 0.8,
+    "tradeable": [
+      "group_discount",
+      "free_upgrade"
+    ],
+    "patience_rounds": 4,
+    "free_cancellation_days": 4
+  },
+  {
+    "id": "S_16",
+    "name": "Serene Journeys",
+    "personality": "calm wellness and culture host, generous with upgrades",
+    "floor_ratio": 0.84,
+    "tradeable": [
+      "free_upgrade",
+      "early_payment_discount"
+    ],
+    "patience_rounds": 3,
+    "free_cancellation_days": 6
+  },
+  {
+    "id": "S_17",
+    "name": "Roadrunner Transfers",
+    "personality": "volume transfer operator who offers discounts for bigger bookings",
+    "floor_ratio": 0.86,
+    "tradeable": [
+      "group_discount",
+      "early_payment_discount"
+    ],
+    "patience_rounds": 3,
+    "free_cancellation_days": 2
+  },
+  {
+    "id": "S_18",
+    "name": "Dawn Chauffeurs",
+    "personality": "premium cars and drivers, firm on price, will upgrade the vehicle",
+    "floor_ratio": 0.89,
+    "tradeable": [
+      "free_upgrade"
+    ],
+    "patience_rounds": 2,
+    "free_cancellation_days": 3
   }
 ]

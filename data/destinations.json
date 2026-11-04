@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Delhi",
+    "code": "DEL",
+    "region": "North",
+    "kind": "metro",
+    "tagline": "Capital of empires, street food and late nights",
+    "lat": 28.61,
+    "lon": 77.21,
+    "hub": true
+  },
+  {
+    "name": "Agra",
+    "code": "AGR",
+    "region": "North",
+    "kind": "heritage",
+    "tagline": "The Taj, Mughal gardens and marble inlay",
+    "lat": 27.18,
+    "lon": 78.01,
+    "hub": false
+  },
+  {
+    "name": "Amritsar",
+    "code": "AMR",
+    "region": "North",
+    "kind": "heritage",
+    "tagline": "Golden Temple, langar and the Wagah border",
+    "lat": 31.63,
+    "lon": 74.87,
+    "hub": false
+  },
+  {
+    "name": "Manali",
+    "code": "MAN",
+    "region": "Himalaya",
+    "kind": "hill",
+    "tagline": "Snow passes, river rafting and pine valleys",
+    "lat": 32.24,
+    "lon": 77.19,
+    "hub": false
+  },
+  {
+    "name": "Rishikesh",
+    "code": "RSH",
+    "region": "Himalaya",
+    "kind": "hill",
+    "tagline": "Yoga, the Ganga and white-water rafting",
+    "lat": 30.09,
+    "lon": 78.27,
+    "hub": false
+  },
+  {
+    "name": "Leh",
+    "code": "LEH",
+    "region": "Himalaya",
+    "kind": "hill",
+    "tagline": "High passes, monasteries and Pangong blue",
+    "lat": 34.15,
+    "lon": 77.58,
+    "hub": false
+  },
+  {
+    "name": "Jaipur",
+    "code": "JAI",
+    "region": "West",
+    "kind": "heritage",
+    "tagline": "The Pink City of forts, bazaars and block prints",
+    "lat": 26.91,
+    "lon": 75.79,
+    "hub": false
+  },
+  {
+    "name": "Udaipur",
+    "code": "UDA",
+    "region": "West",
+    "kind": "heritage",
+    "tagline": "Lake palaces and golden-hour boat rides",
+    "lat": 24.59,
+    "lon": 73.71,
+    "hub": false
+  },
+  {
+    "name": "Mumbai",
+    "code": "MUM",
+    "region": "West",
+    "kind": "metro",
+    "tagline": "Maximum city: sea, cinema and street food",
+    "lat": 19.08,
+    "lon": 72.88,
+    "hub": true
+  },
+  {
+    "name": "Goa",
+    "code": "GOA",
+    "region": "West",
+    "kind": "beach",
+    "tagline": "Beaches, Portuguese lanes and slow sunsets",
+    "lat": 15.5,
+    "lon": 73.83,
+    "hub": false
+  },
+  {
+    "name": "Varanasi",
+    "code": "VAR",
+    "region": "Central",
+    "kind": "heritage",
+    "tagline": "Ancient ghats, dawn boat rides and silk",
+    "lat": 25.32,
+    "lon": 83.01,
+    "hub": false
+  },
+  {
+    "name": "Kolkata",
+    "code": "KOL",
+    "region": "East",
+    "kind": "heritage",
+    "tagline": "Trams, sweets, colonial grandeur and art",
+    "lat": 22.57,
+    "lon": 88.36,
+    "hub": true
+  },
+  {
+    "name": "Darjeeling",
+    "code": "DAR",
+    "region": "East",
+    "kind": "hill",
+    "tagline": "Tea hills, toy trains and Kanchenjunga sunrise",
+    "lat": 27.04,
+    "lon": 88.26,
+    "hub": false
+  },
+  {
+    "name": "Kerala",
+    "code": "KER",
+    "region": "South",
+    "kind": "beach",
+    "tagline": "Backwaters, spice hills and Ayurveda",
+    "lat": 9.93,
+    "lon": 76.27,
+    "hub": false
+  },
+  {
+    "name": "Andaman",
+    "code": "AND",
+    "region": "Islands",
+    "kind": "beach",
+    "tagline": "Turquoise water, coral reefs and white sand",
+    "lat": 11.62,
+    "lon": 92.73,
+    "hub": false
+  },
+  {
+    "name": "Meghalaya",
+    "code": "MEG",
+    "region": "North-East",
+    "kind": "hill",
+    "tagline": "Living root bridges, waterfalls and cloud-top villages",
+    "lat": 25.57,
+    "lon": 91.88,
+    "hub": false
+  }
+]

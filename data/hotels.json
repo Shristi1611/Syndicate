@@ -1,90 +1,2602 @@
 [
   {
-    "id": "H_GOA_01",
-    "name": "Palm Cove Resort",
-    "destination": "Goa",
-    "star": 4,
-    "tags": ["quiet", "beachfront", "ground-floor-rooms"],
-    "stairs_free": true,
-    "list_price_per_night": 7000,
-    "rooms_available": 6,
-    "supplier_id": "S_03"
-  },
-  {
-    "id": "H_GOA_02",
-    "name": "Baga Breeze Hotel",
-    "destination": "Goa",
-    "star": 3,
-    "tags": ["lively", "nightlife", "near-beach"],
+    "id": "H_DEL_01",
+    "name": "Harbour Grand",
+    "destination": "Delhi",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "spa",
+      "pool",
+      "central",
+      "romantic"
+    ],
     "stairs_free": false,
-    "list_price_per_night": 3800,
+    "list_price_per_night": 14000,
     "rooms_available": 10,
-    "supplier_id": "S_04"
+    "supplier_id": "S_10",
+    "lat": 28.6145,
+    "lon": 77.2327
   },
   {
-    "id": "H_GOA_03",
-    "name": "Portuguese Heritage Villa",
-    "destination": "Goa",
+    "id": "H_DEL_02",
+    "name": "Cinnabar Rooftop Hotel",
+    "destination": "Delhi",
     "star": 4,
-    "tags": ["quiet", "heritage", "pool"],
+    "tags": [
+      "boutique",
+      "central",
+      "rooftop",
+      "quiet"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 7500,
+    "rooms_available": 8,
+    "supplier_id": "S_04",
+    "lat": 28.5702,
+    "lon": 77.1765
+  },
+  {
+    "id": "H_DEL_03",
+    "name": "Metro Rooftop Hotel",
+    "destination": "Delhi",
+    "star": 4,
+    "tags": [
+      "boutique",
+      "central",
+      "rooftop",
+      "quiet"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 6800,
+    "rooms_available": 8,
+    "supplier_id": "S_06",
+    "lat": 28.5868,
+    "lon": 77.1901
+  },
+  {
+    "id": "H_DEL_04",
+    "name": "Zenith Park Hotel",
+    "destination": "Delhi",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "central"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 8300,
+    "rooms_available": 12,
+    "supplier_id": "S_02",
+    "lat": 28.6278,
+    "lon": 77.1772
+  },
+  {
+    "id": "H_DEL_05",
+    "name": "Crown Park Hotel",
+    "destination": "Delhi",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "central"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 7100,
+    "rooms_available": 13,
+    "supplier_id": "S_10",
+    "lat": 28.5947,
+    "lon": 77.2378
+  },
+  {
+    "id": "H_DEL_06",
+    "name": "Central Hotel",
+    "destination": "Delhi",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "budget"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3900,
+    "rooms_available": 18,
+    "supplier_id": "S_08",
+    "lat": 28.6394,
+    "lon": 77.204
+  },
+  {
+    "id": "H_DEL_07",
+    "name": "Cinnabar Hotel",
+    "destination": "Delhi",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "budget"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 4600,
+    "rooms_available": 18,
+    "supplier_id": "S_05",
+    "lat": 28.6376,
+    "lon": 77.2151
+  },
+  {
+    "id": "H_DEL_08",
+    "name": "Metro Rooms",
+    "destination": "Delhi",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively",
+      "nightlife"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2800,
+    "rooms_available": 15,
+    "supplier_id": "S_03",
+    "lat": 28.6355,
+    "lon": 77.247
+  },
+  {
+    "id": "H_AGR_01",
+    "name": "Turmeric Mahal",
+    "destination": "Agra",
+    "star": 5,
+    "tags": [
+      "heritage",
+      "luxury",
+      "pool",
+      "romantic",
+      "spa"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 13000,
+    "rooms_available": 7,
+    "supplier_id": "S_04",
+    "lat": 27.1635,
+    "lon": 77.9915
+  },
+  {
+    "id": "H_AGR_02",
+    "name": "Chinar Kothi",
+    "destination": "Agra",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 4800,
+    "rooms_available": 7,
+    "supplier_id": "S_06",
+    "lat": 27.2137,
+    "lon": 77.9908
+  },
+  {
+    "id": "H_AGR_03",
+    "name": "Turmeric Kothi",
+    "destination": "Agra",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5800,
+    "rooms_available": 4,
+    "supplier_id": "S_05",
+    "lat": 27.1653,
+    "lon": 78.0433
+  },
+  {
+    "id": "H_AGR_04",
+    "name": "Cardamom Garden Hotel",
+    "destination": "Agra",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4700,
+    "rooms_available": 9,
+    "supplier_id": "S_03",
+    "lat": 27.2174,
+    "lon": 78.0374
+  },
+  {
+    "id": "H_AGR_05",
+    "name": "Mehfil Garden Hotel",
+    "destination": "Agra",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5500,
+    "rooms_available": 8,
+    "supplier_id": "S_02",
+    "lat": 27.1556,
+    "lon": 78.0385
+  },
+  {
+    "id": "H_AGR_06",
+    "name": "Peacock Inn",
+    "destination": "Agra",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2600,
+    "rooms_available": 11,
+    "supplier_id": "S_10",
+    "lat": 27.1837,
+    "lon": 78.0369
+  },
+  {
+    "id": "H_AGR_07",
+    "name": "Lotus Suites",
+    "destination": "Agra",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3200,
+    "rooms_available": 8,
+    "supplier_id": "S_09",
+    "lat": 27.2165,
+    "lon": 78.0235
+  },
+  {
+    "id": "H_AGR_08",
+    "name": "Rani Suites",
+    "destination": "Agra",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3200,
+    "rooms_available": 12,
+    "supplier_id": "S_10",
+    "lat": 27.2016,
+    "lon": 78.046
+  },
+  {
+    "id": "H_AGR_09",
+    "name": "Jasmine Stay",
+    "destination": "Agra",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1600,
+    "rooms_available": 13,
+    "supplier_id": "S_08",
+    "lat": 27.187,
+    "lon": 78.0467
+  },
+  {
+    "id": "H_AGR_10",
+    "name": "Peacock Guesthouse",
+    "destination": "Agra",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2000,
+    "rooms_available": 20,
+    "supplier_id": "S_03",
+    "lat": 27.2148,
+    "lon": 78.0327
+  },
+  {
+    "id": "H_AMR_01",
+    "name": "Lotus Mahal",
+    "destination": "Amritsar",
+    "star": 5,
+    "tags": [
+      "heritage",
+      "luxury",
+      "pool",
+      "romantic",
+      "spa"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 11700,
+    "rooms_available": 7,
+    "supplier_id": "S_10",
+    "lat": 31.6395,
+    "lon": 74.8437
+  },
+  {
+    "id": "H_AMR_02",
+    "name": "Courtyard House",
+    "destination": "Amritsar",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5700,
+    "rooms_available": 5,
+    "supplier_id": "S_02",
+    "lat": 31.6338,
+    "lon": 74.8327
+  },
+  {
+    "id": "H_AMR_03",
+    "name": "Rose Haveli",
+    "destination": "Amritsar",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5900,
+    "rooms_available": 7,
+    "supplier_id": "S_04",
+    "lat": 31.6287,
+    "lon": 74.8843
+  },
+  {
+    "id": "H_AMR_04",
+    "name": "Indigo House",
+    "destination": "Amritsar",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 4500,
+    "rooms_available": 5,
+    "supplier_id": "S_03",
+    "lat": 31.6429,
+    "lon": 74.8449
+  },
+  {
+    "id": "H_AMR_05",
+    "name": "Peacock Garden Hotel",
+    "destination": "Amritsar",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4800,
+    "rooms_available": 8,
+    "supplier_id": "S_03",
+    "lat": 31.6175,
+    "lon": 74.8511
+  },
+  {
+    "id": "H_AMR_06",
+    "name": "Mughal Garden Hotel",
+    "destination": "Amritsar",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5200,
+    "rooms_available": 9,
+    "supplier_id": "S_03",
+    "lat": 31.6161,
+    "lon": 74.8686
+  },
+  {
+    "id": "H_AMR_07",
+    "name": "Mehfil Inn",
+    "destination": "Amritsar",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2400,
+    "rooms_available": 14,
+    "supplier_id": "S_04",
+    "lat": 31.6085,
+    "lon": 74.9063
+  },
+  {
+    "id": "H_AMR_08",
+    "name": "Mughal Suites",
+    "destination": "Amritsar",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3300,
+    "rooms_available": 14,
+    "supplier_id": "S_03",
+    "lat": 31.6669,
+    "lon": 74.8582
+  },
+  {
+    "id": "H_AMR_09",
+    "name": "Zari Stay",
+    "destination": "Amritsar",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1200,
+    "rooms_available": 13,
+    "supplier_id": "S_02",
+    "lat": 31.6397,
+    "lon": 74.8524
+  },
+  {
+    "id": "H_AMR_10",
+    "name": "Zari Guesthouse",
+    "destination": "Amritsar",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1700,
+    "rooms_available": 19,
+    "supplier_id": "S_05",
+    "lat": 31.6436,
+    "lon": 74.8406
+  },
+  {
+    "id": "H_MAN_01",
+    "name": "Juniper Lodge and Spa",
+    "destination": "Manali",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "views",
+      "spa",
+      "romantic",
+      "mountain"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 9300,
+    "rooms_available": 4,
+    "supplier_id": "S_01",
+    "lat": 32.2077,
+    "lon": 77.1518
+  },
+  {
+    "id": "H_MAN_02",
+    "name": "Aspen Retreat",
+    "destination": "Manali",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 5000,
+    "rooms_available": 6,
+    "supplier_id": "S_08",
+    "lat": 32.2486,
+    "lon": 77.2024
+  },
+  {
+    "id": "H_MAN_03",
+    "name": "Ridge Cottages",
+    "destination": "Manali",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
     "stairs_free": false,
     "list_price_per_night": 6200,
-    "rooms_available": 4,
-    "supplier_id": "S_02"
+    "rooms_available": 5,
+    "supplier_id": "S_10",
+    "lat": 32.237,
+    "lon": 77.2283
   },
   {
-    "id": "H_GOA_04",
-    "name": "Coastline Grand",
-    "destination": "Goa",
-    "star": 5,
-    "tags": ["luxury", "beachfront", "spa"],
+    "id": "H_MAN_04",
+    "name": "Meadow Hillside Resort",
+    "destination": "Manali",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
     "stairs_free": true,
-    "list_price_per_night": 12500,
+    "list_price_per_night": 6400,
     "rooms_available": 8,
-    "supplier_id": "S_01"
+    "supplier_id": "S_07",
+    "lat": 32.2234,
+    "lon": 77.2153
+  },
+  {
+    "id": "H_MAN_05",
+    "name": "Cedar Valley Lodge",
+    "destination": "Manali",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4700,
+    "rooms_available": 8,
+    "supplier_id": "S_05",
+    "lat": 32.2582,
+    "lon": 77.2115
+  },
+  {
+    "id": "H_MAN_06",
+    "name": "Larch Lodge",
+    "destination": "Manali",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3700,
+    "rooms_available": 12,
+    "supplier_id": "S_01",
+    "lat": 32.2434,
+    "lon": 77.1774
+  },
+  {
+    "id": "H_MAN_07",
+    "name": "Misty Inn",
+    "destination": "Manali",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3200,
+    "rooms_available": 12,
+    "supplier_id": "S_02",
+    "lat": 32.2095,
+    "lon": 77.1601
+  },
+  {
+    "id": "H_MAN_08",
+    "name": "Orchid Inn",
+    "destination": "Manali",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2900,
+    "rooms_available": 11,
+    "supplier_id": "S_10",
+    "lat": 32.2101,
+    "lon": 77.1832
+  },
+  {
+    "id": "H_MAN_09",
+    "name": "Cloud Homestay",
+    "destination": "Manali",
+    "star": 2,
+    "tags": [
+      "budget",
+      "lively",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1600,
+    "rooms_available": 10,
+    "supplier_id": "S_09",
+    "lat": 32.2023,
+    "lon": 77.2074
+  },
+  {
+    "id": "H_RSH_01",
+    "name": "Cloud Lodge and Spa",
+    "destination": "Rishikesh",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "views",
+      "spa",
+      "romantic",
+      "mountain"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 10900,
+    "rooms_available": 4,
+    "supplier_id": "S_04",
+    "lat": 30.1043,
+    "lon": 78.299
+  },
+  {
+    "id": "H_RSH_02",
+    "name": "Pinecrest Valley Resort",
+    "destination": "Rishikesh",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "views",
+      "spa",
+      "romantic",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 12000,
+    "rooms_available": 6,
+    "supplier_id": "S_04",
+    "lat": 30.0949,
+    "lon": 78.2521
+  },
+  {
+    "id": "H_RSH_03",
+    "name": "Highland Cottages",
+    "destination": "Rishikesh",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 6100,
+    "rooms_available": 7,
+    "supplier_id": "S_09",
+    "lat": 30.1149,
+    "lon": 78.3018
+  },
+  {
+    "id": "H_RSH_04",
+    "name": "Snowline Cottages",
+    "destination": "Rishikesh",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5700,
+    "rooms_available": 7,
+    "supplier_id": "S_03",
+    "lat": 30.0888,
+    "lon": 78.2304
+  },
+  {
+    "id": "H_RSH_05",
+    "name": "Larch Garden Hotel",
+    "destination": "Rishikesh",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4700,
+    "rooms_available": 7,
+    "supplier_id": "S_02",
+    "lat": 30.0739,
+    "lon": 78.2737
+  },
+  {
+    "id": "H_RSH_06",
+    "name": "Misty Garden Hotel",
+    "destination": "Rishikesh",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4600,
+    "rooms_available": 10,
+    "supplier_id": "S_04",
+    "lat": 30.118,
+    "lon": 78.2856
+  },
+  {
+    "id": "H_RSH_07",
+    "name": "Pinecrest Lodge",
+    "destination": "Rishikesh",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 2600,
+    "rooms_available": 12,
+    "supplier_id": "S_09",
+    "lat": 30.115,
+    "lon": 78.2829
+  },
+  {
+    "id": "H_RSH_08",
+    "name": "Alpine Hotel",
+    "destination": "Rishikesh",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3400,
+    "rooms_available": 11,
+    "supplier_id": "S_06",
+    "lat": 30.0938,
+    "lon": 78.2548
+  },
+  {
+    "id": "H_RSH_09",
+    "name": "Rhododendron Inn",
+    "destination": "Rishikesh",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3100,
+    "rooms_available": 10,
+    "supplier_id": "S_05",
+    "lat": 30.0933,
+    "lon": 78.2586
+  },
+  {
+    "id": "H_RSH_10",
+    "name": "Cedar Stay",
+    "destination": "Rishikesh",
+    "star": 2,
+    "tags": [
+      "budget",
+      "lively",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1900,
+    "rooms_available": 18,
+    "supplier_id": "S_08",
+    "lat": 30.1251,
+    "lon": 78.2585
+  },
+  {
+    "id": "H_LEH_01",
+    "name": "Misty Valley Resort",
+    "destination": "Leh",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "views",
+      "spa",
+      "romantic",
+      "mountain"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 11500,
+    "rooms_available": 4,
+    "supplier_id": "S_07",
+    "lat": 34.131,
+    "lon": 77.5641
+  },
+  {
+    "id": "H_LEH_02",
+    "name": "Frost Mountain Resort",
+    "destination": "Leh",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "views",
+      "spa",
+      "romantic",
+      "mountain"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 11600,
+    "rooms_available": 8,
+    "supplier_id": "S_09",
+    "lat": 34.1298,
+    "lon": 77.5687
+  },
+  {
+    "id": "H_LEH_03",
+    "name": "Valley Chalet",
+    "destination": "Leh",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 8100,
+    "rooms_available": 4,
+    "supplier_id": "S_02",
+    "lat": 34.1747,
+    "lon": 77.6022
+  },
+  {
+    "id": "H_LEH_04",
+    "name": "Snowline Retreat",
+    "destination": "Leh",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 6500,
+    "rooms_available": 7,
+    "supplier_id": "S_09",
+    "lat": 34.1549,
+    "lon": 77.5658
+  },
+  {
+    "id": "H_LEH_05",
+    "name": "Frost Retreat",
+    "destination": "Leh",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 8300,
+    "rooms_available": 6,
+    "supplier_id": "S_03",
+    "lat": 34.1257,
+    "lon": 77.577
+  },
+  {
+    "id": "H_LEH_06",
+    "name": "Valley Valley Lodge",
+    "destination": "Leh",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 7700,
+    "rooms_available": 10,
+    "supplier_id": "S_07",
+    "lat": 34.127,
+    "lon": 77.5753
+  },
+  {
+    "id": "H_LEH_07",
+    "name": "Larch Valley Lodge",
+    "destination": "Leh",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 7000,
+    "rooms_available": 8,
+    "supplier_id": "S_02",
+    "lat": 34.1356,
+    "lon": 77.6073
+  },
+  {
+    "id": "H_LEH_08",
+    "name": "Juniper Inn",
+    "destination": "Leh",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3700,
+    "rooms_available": 10,
+    "supplier_id": "S_03",
+    "lat": 34.1549,
+    "lon": 77.5499
+  },
+  {
+    "id": "H_LEH_09",
+    "name": "Cedar Hotel",
+    "destination": "Leh",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3500,
+    "rooms_available": 13,
+    "supplier_id": "S_06",
+    "lat": 34.1639,
+    "lon": 77.5669
+  },
+  {
+    "id": "H_LEH_10",
+    "name": "Summit Stay",
+    "destination": "Leh",
+    "star": 2,
+    "tags": [
+      "budget",
+      "lively",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2300,
+    "rooms_available": 11,
+    "supplier_id": "S_07",
+    "lat": 34.1382,
+    "lon": 77.5664
   },
   {
     "id": "H_JAI_01",
-    "name": "Rajmahal Haveli",
+    "name": "Cardamom Mahal",
     "destination": "Jaipur",
     "star": 5,
-    "tags": ["heritage", "luxury", "pool"],
+    "tags": [
+      "heritage",
+      "luxury",
+      "pool",
+      "romantic",
+      "spa"
+    ],
     "stairs_free": true,
-    "list_price_per_night": 11000,
-    "rooms_available": 5,
-    "supplier_id": "S_02"
+    "list_price_per_night": 14300,
+    "rooms_available": 8,
+    "supplier_id": "S_06",
+    "lat": 26.8763,
+    "lon": 75.8054
   },
   {
     "id": "H_JAI_02",
-    "name": "Pink City Inn",
+    "name": "Lotus Palace",
     "destination": "Jaipur",
-    "star": 3,
-    "tags": ["budget", "central"],
-    "stairs_free": false,
-    "list_price_per_night": 2800,
-    "rooms_available": 12,
-    "supplier_id": "S_04"
+    "star": 5,
+    "tags": [
+      "heritage",
+      "luxury",
+      "pool",
+      "romantic",
+      "spa"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 13000,
+    "rooms_available": 6,
+    "supplier_id": "S_04",
+    "lat": 26.9454,
+    "lon": 75.7665
   },
   {
     "id": "H_JAI_03",
-    "name": "Amber View Retreat",
+    "name": "Peacock House",
     "destination": "Jaipur",
     "star": 4,
-    "tags": ["quiet", "views", "garden"],
-    "stairs_free": true,
-    "list_price_per_night": 6500,
-    "rooms_available": 6,
-    "supplier_id": "S_03"
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 7000,
+    "rooms_available": 7,
+    "supplier_id": "S_09",
+    "lat": 26.9245,
+    "lon": 75.7947
   },
   {
     "id": "H_JAI_04",
-    "name": "Bazaar Boutique Hotel",
+    "name": "Mughal Haveli",
     "destination": "Jaipur",
     "star": 4,
-    "tags": ["boutique", "central", "rooftop"],
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5500,
+    "rooms_available": 5,
+    "supplier_id": "S_09",
+    "lat": 26.9287,
+    "lon": 75.8291
+  },
+  {
+    "id": "H_JAI_05",
+    "name": "Rani Garden Hotel",
+    "destination": "Jaipur",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 7300,
+    "rooms_available": 8,
+    "supplier_id": "S_06",
+    "lat": 26.9185,
+    "lon": 75.7704
+  },
+  {
+    "id": "H_JAI_06",
+    "name": "Marigold Courtyard",
+    "destination": "Jaipur",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 7000,
+    "rooms_available": 9,
+    "supplier_id": "S_03",
+    "lat": 26.8717,
+    "lon": 75.8147
+  },
+  {
+    "id": "H_JAI_07",
+    "name": "Indigo Hotel",
+    "destination": "Jaipur",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
     "stairs_free": false,
-    "list_price_per_night": 5200,
+    "list_price_per_night": 3100,
+    "rooms_available": 10,
+    "supplier_id": "S_09",
+    "lat": 26.9374,
+    "lon": 75.782
+  },
+  {
+    "id": "H_JAI_08",
+    "name": "Mughal Inn",
+    "destination": "Jaipur",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3000,
+    "rooms_available": 13,
+    "supplier_id": "S_09",
+    "lat": 26.9246,
+    "lon": 75.8113
+  },
+  {
+    "id": "H_JAI_09",
+    "name": "Peacock Stay",
+    "destination": "Jaipur",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1600,
+    "rooms_available": 18,
+    "supplier_id": "S_10",
+    "lat": 26.896,
+    "lon": 75.7754
+  },
+  {
+    "id": "H_UDA_01",
+    "name": "Rani Mahal",
+    "destination": "Udaipur",
+    "star": 5,
+    "tags": [
+      "heritage",
+      "luxury",
+      "pool",
+      "romantic",
+      "spa"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 12400,
     "rooms_available": 7,
-    "supplier_id": "S_01"
+    "supplier_id": "S_09",
+    "lat": 24.5992,
+    "lon": 73.7131
+  },
+  {
+    "id": "H_UDA_02",
+    "name": "Jasmine House",
+    "destination": "Udaipur",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 6400,
+    "rooms_available": 5,
+    "supplier_id": "S_03",
+    "lat": 24.6138,
+    "lon": 73.7339
+  },
+  {
+    "id": "H_UDA_03",
+    "name": "Marigold Kothi",
+    "destination": "Udaipur",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 7700,
+    "rooms_available": 6,
+    "supplier_id": "S_03",
+    "lat": 24.5611,
+    "lon": 73.747
+  },
+  {
+    "id": "H_UDA_04",
+    "name": "Amber Residency",
+    "destination": "Udaipur",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 7600,
+    "rooms_available": 6,
+    "supplier_id": "S_03",
+    "lat": 24.6044,
+    "lon": 73.7031
+  },
+  {
+    "id": "H_UDA_05",
+    "name": "Saffron Garden Hotel",
+    "destination": "Udaipur",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 7400,
+    "rooms_available": 7,
+    "supplier_id": "S_09",
+    "lat": 24.5791,
+    "lon": 73.7134
+  },
+  {
+    "id": "H_UDA_06",
+    "name": "Jasmine Hotel",
+    "destination": "Udaipur",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3900,
+    "rooms_available": 9,
+    "supplier_id": "S_09",
+    "lat": 24.5532,
+    "lon": 73.6706
+  },
+  {
+    "id": "H_UDA_07",
+    "name": "Mehfil Hotel",
+    "destination": "Udaipur",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3300,
+    "rooms_available": 14,
+    "supplier_id": "S_01",
+    "lat": 24.5631,
+    "lon": 73.6853
+  },
+  {
+    "id": "H_UDA_08",
+    "name": "Mughal Hostel",
+    "destination": "Udaipur",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2400,
+    "rooms_available": 12,
+    "supplier_id": "S_04",
+    "lat": 24.568,
+    "lon": 73.7474
+  },
+  {
+    "id": "H_UDA_09",
+    "name": "Mughal Stay",
+    "destination": "Udaipur",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 1700,
+    "rooms_available": 16,
+    "supplier_id": "S_08",
+    "lat": 24.6185,
+    "lon": 73.7264
+  },
+  {
+    "id": "H_MUM_01",
+    "name": "Atlas Grand",
+    "destination": "Mumbai",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "spa",
+      "pool",
+      "central",
+      "romantic"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 18200,
+    "rooms_available": 10,
+    "supplier_id": "S_03",
+    "lat": 19.0919,
+    "lon": 72.9131
+  },
+  {
+    "id": "H_MUM_02",
+    "name": "Opal House",
+    "destination": "Mumbai",
+    "star": 4,
+    "tags": [
+      "boutique",
+      "central",
+      "rooftop",
+      "quiet"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 9300,
+    "rooms_available": 5,
+    "supplier_id": "S_08",
+    "lat": 19.0817,
+    "lon": 72.9109
+  },
+  {
+    "id": "H_MUM_03",
+    "name": "Crown Boutique Hotel",
+    "destination": "Mumbai",
+    "star": 4,
+    "tags": [
+      "boutique",
+      "central",
+      "rooftop",
+      "quiet"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 9500,
+    "rooms_available": 6,
+    "supplier_id": "S_09",
+    "lat": 19.0578,
+    "lon": 72.8687
+  },
+  {
+    "id": "H_MUM_04",
+    "name": "Skyline Park Hotel",
+    "destination": "Mumbai",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "central"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 7600,
+    "rooms_available": 13,
+    "supplier_id": "S_09",
+    "lat": 19.0661,
+    "lon": 72.8604
+  },
+  {
+    "id": "H_MUM_05",
+    "name": "Opal Park Hotel",
+    "destination": "Mumbai",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "central"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 8500,
+    "rooms_available": 14,
+    "supplier_id": "S_09",
+    "lat": 19.1057,
+    "lon": 72.9157
+  },
+  {
+    "id": "H_MUM_06",
+    "name": "Central Lodge",
+    "destination": "Mumbai",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "budget"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5300,
+    "rooms_available": 10,
+    "supplier_id": "S_02",
+    "lat": 19.0822,
+    "lon": 72.8762
+  },
+  {
+    "id": "H_MUM_07",
+    "name": "Ivory Hotel",
+    "destination": "Mumbai",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "budget"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 4000,
+    "rooms_available": 17,
+    "supplier_id": "S_09",
+    "lat": 19.0418,
+    "lon": 72.9119
+  },
+  {
+    "id": "H_MUM_08",
+    "name": "Central Hostel",
+    "destination": "Mumbai",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively",
+      "nightlife"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 2100,
+    "rooms_available": 20,
+    "supplier_id": "S_05",
+    "lat": 19.0415,
+    "lon": 72.8437
+  },
+  {
+    "id": "H_GOA_01",
+    "name": "Tamarind Resort",
+    "destination": "Goa",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "beachfront",
+      "spa",
+      "romantic",
+      "pool"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 13200,
+    "rooms_available": 4,
+    "supplier_id": "S_10",
+    "lat": 15.4981,
+    "lon": 73.8205
+  },
+  {
+    "id": "H_GOA_02",
+    "name": "Sandpiper Cove",
+    "destination": "Goa",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "beachfront",
+      "romantic",
+      "boutique"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 6600,
+    "rooms_available": 4,
+    "supplier_id": "S_09",
+    "lat": 15.4972,
+    "lon": 73.8012
+  },
+  {
+    "id": "H_GOA_03",
+    "name": "Monsoon Cove",
+    "destination": "Goa",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "beachfront",
+      "romantic",
+      "boutique"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5800,
+    "rooms_available": 4,
+    "supplier_id": "S_06",
+    "lat": 15.5082,
+    "lon": 73.8316
+  },
+  {
+    "id": "H_GOA_04",
+    "name": "Sunset Family Resort",
+    "destination": "Goa",
+    "star": 4,
+    "tags": [
+      "family",
+      "pool",
+      "quiet",
+      "food"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 7300,
+    "rooms_available": 10,
+    "supplier_id": "S_02",
+    "lat": 15.5044,
+    "lon": 73.8266
+  },
+  {
+    "id": "H_GOA_05",
+    "name": "Mango Gardens",
+    "destination": "Goa",
+    "star": 4,
+    "tags": [
+      "family",
+      "pool",
+      "quiet",
+      "food"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 6900,
+    "rooms_available": 6,
+    "supplier_id": "S_04",
+    "lat": 15.4757,
+    "lon": 73.811
+  },
+  {
+    "id": "H_GOA_06",
+    "name": "Sunset Hotel",
+    "destination": "Goa",
+    "star": 3,
+    "tags": [
+      "lively",
+      "nightlife",
+      "central"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3900,
+    "rooms_available": 10,
+    "supplier_id": "S_03",
+    "lat": 15.5349,
+    "lon": 73.7929
+  },
+  {
+    "id": "H_GOA_07",
+    "name": "Breeze Hotel",
+    "destination": "Goa",
+    "star": 3,
+    "tags": [
+      "lively",
+      "nightlife",
+      "central"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3800,
+    "rooms_available": 11,
+    "supplier_id": "S_09",
+    "lat": 15.5134,
+    "lon": 73.8185
+  },
+  {
+    "id": "H_GOA_08",
+    "name": "Tamarind Lodge",
+    "destination": "Goa",
+    "star": 2,
+    "tags": [
+      "budget",
+      "lively",
+      "nightlife"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2300,
+    "rooms_available": 20,
+    "supplier_id": "S_01",
+    "lat": 15.5366,
+    "lon": 73.8622
+  },
+  {
+    "id": "H_VAR_01",
+    "name": "Garden Mahal",
+    "destination": "Varanasi",
+    "star": 5,
+    "tags": [
+      "heritage",
+      "luxury",
+      "pool",
+      "romantic",
+      "spa"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 10400,
+    "rooms_available": 4,
+    "supplier_id": "S_04",
+    "lat": 25.2825,
+    "lon": 83.0031
+  },
+  {
+    "id": "H_VAR_02",
+    "name": "Chinar Palace",
+    "destination": "Varanasi",
+    "star": 5,
+    "tags": [
+      "heritage",
+      "luxury",
+      "pool",
+      "romantic",
+      "spa"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 10400,
+    "rooms_available": 5,
+    "supplier_id": "S_04",
+    "lat": 25.2932,
+    "lon": 82.9859
+  },
+  {
+    "id": "H_VAR_03",
+    "name": "Amber Kothi",
+    "destination": "Varanasi",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5700,
+    "rooms_available": 4,
+    "supplier_id": "S_01",
+    "lat": 25.3075,
+    "lon": 83.0298
+  },
+  {
+    "id": "H_VAR_04",
+    "name": "Cardamom Haveli",
+    "destination": "Varanasi",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 4400,
+    "rooms_available": 7,
+    "supplier_id": "S_03",
+    "lat": 25.3349,
+    "lon": 82.9958
+  },
+  {
+    "id": "H_VAR_05",
+    "name": "Peacock Courtyard",
+    "destination": "Varanasi",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4900,
+    "rooms_available": 9,
+    "supplier_id": "S_07",
+    "lat": 25.3337,
+    "lon": 82.9971
+  },
+  {
+    "id": "H_VAR_06",
+    "name": "Zari Residency",
+    "destination": "Varanasi",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5700,
+    "rooms_available": 8,
+    "supplier_id": "S_04",
+    "lat": 25.2892,
+    "lon": 83.0402
+  },
+  {
+    "id": "H_VAR_07",
+    "name": "Zari Suites",
+    "destination": "Varanasi",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3200,
+    "rooms_available": 12,
+    "supplier_id": "S_03",
+    "lat": 25.3046,
+    "lon": 83.0125
+  },
+  {
+    "id": "H_VAR_08",
+    "name": "Amber Suites",
+    "destination": "Varanasi",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3200,
+    "rooms_available": 11,
+    "supplier_id": "S_10",
+    "lat": 25.2878,
+    "lon": 83.0232
+  },
+  {
+    "id": "H_VAR_09",
+    "name": "Cardamom Stay",
+    "destination": "Varanasi",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1600,
+    "rooms_available": 17,
+    "supplier_id": "S_02",
+    "lat": 25.2854,
+    "lon": 82.9703
+  },
+  {
+    "id": "H_KOL_01",
+    "name": "Kesar Mahal",
+    "destination": "Kolkata",
+    "star": 5,
+    "tags": [
+      "heritage",
+      "luxury",
+      "pool",
+      "romantic",
+      "spa"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 12800,
+    "rooms_available": 7,
+    "supplier_id": "S_10",
+    "lat": 22.5628,
+    "lon": 88.3437
+  },
+  {
+    "id": "H_KOL_02",
+    "name": "Chinar House",
+    "destination": "Kolkata",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5400,
+    "rooms_available": 4,
+    "supplier_id": "S_04",
+    "lat": 22.5471,
+    "lon": 88.3759
+  },
+  {
+    "id": "H_KOL_03",
+    "name": "Garden Haveli",
+    "destination": "Kolkata",
+    "star": 4,
+    "tags": [
+      "heritage",
+      "quiet",
+      "boutique",
+      "garden",
+      "romantic"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 6300,
+    "rooms_available": 6,
+    "supplier_id": "S_03",
+    "lat": 22.594,
+    "lon": 88.3384
+  },
+  {
+    "id": "H_KOL_04",
+    "name": "Rose Garden Hotel",
+    "destination": "Kolkata",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4800,
+    "rooms_available": 7,
+    "supplier_id": "S_10",
+    "lat": 22.5739,
+    "lon": 88.393
+  },
+  {
+    "id": "H_KOL_05",
+    "name": "Courtyard Residency",
+    "destination": "Kolkata",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "pool",
+      "food",
+      "garden"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5600,
+    "rooms_available": 7,
+    "supplier_id": "S_09",
+    "lat": 22.5542,
+    "lon": 88.3788
+  },
+  {
+    "id": "H_KOL_06",
+    "name": "Zari Inn",
+    "destination": "Kolkata",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3500,
+    "rooms_available": 11,
+    "supplier_id": "S_07",
+    "lat": 22.5809,
+    "lon": 88.3745
+  },
+  {
+    "id": "H_KOL_07",
+    "name": "Chinar Suites",
+    "destination": "Kolkata",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "heritage"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3200,
+    "rooms_available": 10,
+    "supplier_id": "S_09",
+    "lat": 22.5538,
+    "lon": 88.3531
+  },
+  {
+    "id": "H_KOL_08",
+    "name": "Rose Stay",
+    "destination": "Kolkata",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2100,
+    "rooms_available": 14,
+    "supplier_id": "S_10",
+    "lat": 22.5705,
+    "lon": 88.3865
+  },
+  {
+    "id": "H_KOL_09",
+    "name": "Sandalwood Hostel",
+    "destination": "Kolkata",
+    "star": 2,
+    "tags": [
+      "budget",
+      "central",
+      "lively"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1500,
+    "rooms_available": 16,
+    "supplier_id": "S_09",
+    "lat": 22.5643,
+    "lon": 88.3698
+  },
+  {
+    "id": "H_DAR_01",
+    "name": "Misty Mountain Resort",
+    "destination": "Darjeeling",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "views",
+      "spa",
+      "romantic",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 11000,
+    "rooms_available": 7,
+    "supplier_id": "S_02",
+    "lat": 27.0366,
+    "lon": 88.2478
+  },
+  {
+    "id": "H_DAR_02",
+    "name": "Misty Retreat",
+    "destination": "Darjeeling",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 5700,
+    "rooms_available": 5,
+    "supplier_id": "S_06",
+    "lat": 27.0248,
+    "lon": 88.2203
+  },
+  {
+    "id": "H_DAR_03",
+    "name": "Alpine Retreat",
+    "destination": "Darjeeling",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 6500,
+    "rooms_available": 7,
+    "supplier_id": "S_02",
+    "lat": 27.0515,
+    "lon": 88.2861
+  },
+  {
+    "id": "H_DAR_04",
+    "name": "Frost Valley Lodge",
+    "destination": "Darjeeling",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4700,
+    "rooms_available": 10,
+    "supplier_id": "S_03",
+    "lat": 27.01,
+    "lon": 88.2477
+  },
+  {
+    "id": "H_DAR_05",
+    "name": "Misty Hillside Resort",
+    "destination": "Darjeeling",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4600,
+    "rooms_available": 9,
+    "supplier_id": "S_03",
+    "lat": 27.0073,
+    "lon": 88.2749
+  },
+  {
+    "id": "H_DAR_06",
+    "name": "Highland Lodge",
+    "destination": "Darjeeling",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2900,
+    "rooms_available": 8,
+    "supplier_id": "S_08",
+    "lat": 27.038,
+    "lon": 88.2798
+  },
+  {
+    "id": "H_DAR_07",
+    "name": "Larch Hotel",
+    "destination": "Darjeeling",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3600,
+    "rooms_available": 8,
+    "supplier_id": "S_05",
+    "lat": 27.057,
+    "lon": 88.2619
+  },
+  {
+    "id": "H_DAR_08",
+    "name": "Snowline Homestay",
+    "destination": "Darjeeling",
+    "star": 2,
+    "tags": [
+      "budget",
+      "lively",
+      "mountain"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 1600,
+    "rooms_available": 10,
+    "supplier_id": "S_10",
+    "lat": 27.0485,
+    "lon": 88.2446
+  },
+  {
+    "id": "H_KER_01",
+    "name": "Tamarind Beach Resort",
+    "destination": "Kerala",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "beachfront",
+      "spa",
+      "romantic",
+      "pool",
+      "backwaters"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 14200,
+    "rooms_available": 7,
+    "supplier_id": "S_05",
+    "lat": 9.9066,
+    "lon": 76.3046
+  },
+  {
+    "id": "H_KER_02",
+    "name": "Sunset Spa Resort",
+    "destination": "Kerala",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "beachfront",
+      "spa",
+      "romantic",
+      "pool",
+      "backwaters"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 15200,
+    "rooms_available": 6,
+    "supplier_id": "S_05",
+    "lat": 9.9149,
+    "lon": 76.2998
+  },
+  {
+    "id": "H_KER_03",
+    "name": "Coconut Villas",
+    "destination": "Kerala",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "beachfront",
+      "romantic",
+      "boutique",
+      "backwaters"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 6100,
+    "rooms_available": 6,
+    "supplier_id": "S_06",
+    "lat": 9.9482,
+    "lon": 76.3068
+  },
+  {
+    "id": "H_KER_04",
+    "name": "Mango Villas",
+    "destination": "Kerala",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "beachfront",
+      "romantic",
+      "boutique",
+      "backwaters"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5800,
+    "rooms_available": 7,
+    "supplier_id": "S_10",
+    "lat": 9.9201,
+    "lon": 76.2385
+  },
+  {
+    "id": "H_KER_05",
+    "name": "Mango Bay Resort",
+    "destination": "Kerala",
+    "star": 4,
+    "tags": [
+      "family",
+      "pool",
+      "quiet",
+      "food",
+      "backwaters"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 6200,
+    "rooms_available": 9,
+    "supplier_id": "S_10",
+    "lat": 9.916,
+    "lon": 76.2602
+  },
+  {
+    "id": "H_KER_06",
+    "name": "Sunset Gardens",
+    "destination": "Kerala",
+    "star": 4,
+    "tags": [
+      "family",
+      "pool",
+      "quiet",
+      "food",
+      "backwaters"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 5300,
+    "rooms_available": 9,
+    "supplier_id": "S_01",
+    "lat": 9.9188,
+    "lon": 76.2673
+  },
+  {
+    "id": "H_KER_07",
+    "name": "Seashell Suites",
+    "destination": "Kerala",
+    "star": 3,
+    "tags": [
+      "lively",
+      "nightlife",
+      "central",
+      "backwaters"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 3800,
+    "rooms_available": 12,
+    "supplier_id": "S_01",
+    "lat": 9.8993,
+    "lon": 76.2565
+  },
+  {
+    "id": "H_KER_08",
+    "name": "Monsoon Hotel",
+    "destination": "Kerala",
+    "star": 3,
+    "tags": [
+      "lively",
+      "nightlife",
+      "central",
+      "backwaters"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3300,
+    "rooms_available": 9,
+    "supplier_id": "S_04",
+    "lat": 9.8946,
+    "lon": 76.2483
+  },
+  {
+    "id": "H_KER_09",
+    "name": "Coconut Lodge",
+    "destination": "Kerala",
+    "star": 2,
+    "tags": [
+      "budget",
+      "lively",
+      "nightlife",
+      "backwaters"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1500,
+    "rooms_available": 17,
+    "supplier_id": "S_02",
+    "lat": 9.9441,
+    "lon": 76.2729
+  },
+  {
+    "id": "H_AND_01",
+    "name": "Palm Beach Resort",
+    "destination": "Andaman",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "beachfront",
+      "spa",
+      "romantic",
+      "pool"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 17600,
+    "rooms_available": 6,
+    "supplier_id": "S_03",
+    "lat": 11.6014,
+    "lon": 92.7645
+  },
+  {
+    "id": "H_AND_02",
+    "name": "Palm Retreat",
+    "destination": "Andaman",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "beachfront",
+      "romantic",
+      "boutique"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 8600,
+    "rooms_available": 7,
+    "supplier_id": "S_10",
+    "lat": 11.613,
+    "lon": 92.7282
+  },
+  {
+    "id": "H_AND_03",
+    "name": "Coral Cove",
+    "destination": "Andaman",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "beachfront",
+      "romantic",
+      "boutique"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 8900,
+    "rooms_available": 4,
+    "supplier_id": "S_03",
+    "lat": 11.6144,
+    "lon": 92.7116
+  },
+  {
+    "id": "H_AND_04",
+    "name": "Tide Family Resort",
+    "destination": "Andaman",
+    "star": 4,
+    "tags": [
+      "family",
+      "pool",
+      "quiet",
+      "food"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 8800,
+    "rooms_available": 8,
+    "supplier_id": "S_03",
+    "lat": 11.641,
+    "lon": 92.7452
+  },
+  {
+    "id": "H_AND_05",
+    "name": "Tamarind Gardens",
+    "destination": "Andaman",
+    "star": 4,
+    "tags": [
+      "family",
+      "pool",
+      "quiet",
+      "food"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 6600,
+    "rooms_available": 6,
+    "supplier_id": "S_06",
+    "lat": 11.6113,
+    "lon": 92.696
+  },
+  {
+    "id": "H_AND_06",
+    "name": "Azure Beach Inn",
+    "destination": "Andaman",
+    "star": 3,
+    "tags": [
+      "lively",
+      "nightlife",
+      "central"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 5400,
+    "rooms_available": 12,
+    "supplier_id": "S_04",
+    "lat": 11.5956,
+    "lon": 92.7105
+  },
+  {
+    "id": "H_AND_07",
+    "name": "Lagoon Beach Inn",
+    "destination": "Andaman",
+    "star": 3,
+    "tags": [
+      "lively",
+      "nightlife",
+      "central"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 4200,
+    "rooms_available": 12,
+    "supplier_id": "S_06",
+    "lat": 11.6429,
+    "lon": 92.7596
+  },
+  {
+    "id": "H_AND_08",
+    "name": "Monsoon Suites",
+    "destination": "Andaman",
+    "star": 3,
+    "tags": [
+      "lively",
+      "nightlife",
+      "central"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4000,
+    "rooms_available": 8,
+    "supplier_id": "S_07",
+    "lat": 11.6001,
+    "lon": 92.7417
+  },
+  {
+    "id": "H_AND_09",
+    "name": "Cashew Hostel",
+    "destination": "Andaman",
+    "star": 2,
+    "tags": [
+      "budget",
+      "lively",
+      "nightlife"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 2300,
+    "rooms_available": 17,
+    "supplier_id": "S_02",
+    "lat": 11.6528,
+    "lon": 92.7376
+  },
+  {
+    "id": "H_MEG_01",
+    "name": "Larch Mountain Resort",
+    "destination": "Meghalaya",
+    "star": 5,
+    "tags": [
+      "luxury",
+      "views",
+      "spa",
+      "romantic",
+      "mountain"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 9400,
+    "rooms_available": 7,
+    "supplier_id": "S_06",
+    "lat": 25.5527,
+    "lon": 91.8505
+  },
+  {
+    "id": "H_MEG_02",
+    "name": "Pine Chalet",
+    "destination": "Meghalaya",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 6300,
+    "rooms_available": 6,
+    "supplier_id": "S_07",
+    "lat": 25.5372,
+    "lon": 91.8561
+  },
+  {
+    "id": "H_MEG_03",
+    "name": "Cedar Retreat",
+    "destination": "Meghalaya",
+    "star": 4,
+    "tags": [
+      "quiet",
+      "views",
+      "boutique",
+      "garden",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 4700,
+    "rooms_available": 5,
+    "supplier_id": "S_01",
+    "lat": 25.5801,
+    "lon": 91.8655
+  },
+  {
+    "id": "H_MEG_04",
+    "name": "Larch Hillside Resort",
+    "destination": "Meghalaya",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4600,
+    "rooms_available": 8,
+    "supplier_id": "S_09",
+    "lat": 25.5897,
+    "lon": 91.8575
+  },
+  {
+    "id": "H_MEG_05",
+    "name": "Frost Hillside Resort",
+    "destination": "Meghalaya",
+    "star": 4,
+    "tags": [
+      "family",
+      "quiet",
+      "garden",
+      "food",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 4700,
+    "rooms_available": 9,
+    "supplier_id": "S_07",
+    "lat": 25.535,
+    "lon": 91.8921
+  },
+  {
+    "id": "H_MEG_06",
+    "name": "Juniper Hotel",
+    "destination": "Meghalaya",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3200,
+    "rooms_available": 13,
+    "supplier_id": "S_09",
+    "lat": 25.5576,
+    "lon": 91.8722
+  },
+  {
+    "id": "H_MEG_07",
+    "name": "Cedar Lodge",
+    "destination": "Meghalaya",
+    "star": 3,
+    "tags": [
+      "central",
+      "lively",
+      "views"
+    ],
+    "stairs_free": true,
+    "list_price_per_night": 3200,
+    "rooms_available": 11,
+    "supplier_id": "S_01",
+    "lat": 25.5814,
+    "lon": 91.8432
+  },
+  {
+    "id": "H_MEG_08",
+    "name": "Pinecrest Homestay",
+    "destination": "Meghalaya",
+    "star": 2,
+    "tags": [
+      "budget",
+      "lively",
+      "mountain"
+    ],
+    "stairs_free": false,
+    "list_price_per_night": 1200,
+    "rooms_available": 18,
+    "supplier_id": "S_06",
+    "lat": 25.6066,
+    "lon": 91.8611
   }
 ]

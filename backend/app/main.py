@@ -10,7 +10,7 @@ from app.bookings import confirm_quote, create_quote, get_booking
 from app.chat import chat_turn
 from app.config import settings
 from app.disruptions import apply_option, propose
-from app.inventory import ACTIVITIES, HOTELS, get_item, list_price
+from app.inventory import ACTIVITIES, DESTINATIONS, HOTELS, get_item, list_price
 from app.llm import status as llm_status
 from app.negotiation import negotiate
 from app.personas import get_persona, list_personas
@@ -87,6 +87,12 @@ def items():
         }
         for i in [*HOTELS.values(), *ACTIVITIES.values()]
     ]
+
+
+@app.get("/destinations")
+def destinations():
+    """Every city a trip can be planned for, with its region, tagline and coordinates."""
+    return list(DESTINATIONS.values())
 
 
 @app.get("/hotels")

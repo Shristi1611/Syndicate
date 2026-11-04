@@ -1,6 +1,11 @@
 from pydantic import BaseModel, Field
 
-DESTINATIONS = {"Goa", "Jaipur"}  # matches the cities in our seed data
+from app.inventory import DESTINATIONS  # every city in the catalogue, read from the data
+
+
+def _city_list() -> str:
+    names = sorted(DESTINATIONS)
+    return ", ".join(names[:-1]) + f" or {names[-1]}" if len(names) > 1 else names[0]
 
 
 class TravellerProfile(BaseModel):
@@ -17,7 +22,7 @@ class TravellerProfile(BaseModel):
 REQUIRED = ["destination", "nights", "travellers", "budget_total"]
 
 QUESTIONS = {
-    "destination": "Which destination would you like, Goa or Jaipur?",
+    "destination": f"Which destination would you like? I can plan trips to {_city_list()}.",
     "nights": "How many nights are you planning to stay?",
     "travellers": "How many people are travelling?",
     "budget_total": "What is your total budget for the trip, in rupees?",

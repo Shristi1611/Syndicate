@@ -33,7 +33,8 @@ def _mock(prompt: str, system: str) -> str:
     if "Extract trip details" in system:  # profile extraction
         text = prompt.split("Traveller says:", 1)[-1]
         out = {}
-        for city in ("Goa", "Jaipur"):
+        cities = re.search(r"one of (.+?)\n", system)
+        for city in re.findall(r'"([^"]+)"', cities.group(1)) if cities else []:
             if city.lower() in text.lower():
                 out["destination"] = city
         m = re.search(r"(\d+)\s*(?:nights?|days?)", text, re.I)

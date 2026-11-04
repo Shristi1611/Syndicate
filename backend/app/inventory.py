@@ -14,6 +14,18 @@ HOTELS = {h["id"]: h for h in _load("hotels.json")}
 ACTIVITIES = {a["id"]: a for a in _load("activities.json")}
 
 
+def _destinations() -> dict[str, dict]:
+    """The cities a traveller can choose. Older catalogues without destinations.json
+    fall back to the cities their hotels are in."""
+    path = DATA_DIR / "destinations.json"
+    if path.exists():
+        return {d["name"]: d for d in json.loads(path.read_text(encoding="utf-8"))}
+    return {name: {"name": name} for name in sorted({h["destination"] for h in HOTELS.values()})}
+
+
+DESTINATIONS = _destinations()
+
+
 def get_item(item_id: str) -> dict | None:
     """Find a hotel or activity by its id."""
     return HOTELS.get(item_id) or ACTIVITIES.get(item_id)

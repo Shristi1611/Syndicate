@@ -3,8 +3,9 @@ import re
 
 from pydantic import ValidationError
 
+from app.inventory import DESTINATIONS
 from app.llm import generate
-from app.profile import DESTINATIONS, TravellerProfile, next_question
+from app.profile import TravellerProfile, next_question
 
 FIELDS = {"destination", "nights", "travellers", "budget_total", "stairs_free", "interests"}
 
@@ -12,13 +13,18 @@ READY = "Great, I have everything I need. Ready to plan your trip!"
 
 SYSTEM = """Extract trip details from the traveller's message.
 Return one JSON object using only these keys, and only the ones the message clearly states:
-- destination: "Goa" or "Jaipur"
+- destination: one of {cities}
 - nights: whole number
 - travellers: whole number of people
 - budget_total: whole number of rupees for the whole trip (60k means 60000)
 - stairs_free: true if anyone cannot climb stairs or needs step-free access
 - interests: list of short lowercase words such as quiet, heritage, food, nightlife
 Leave out any key that is not stated. Output the JSON object and nothing else."""
+
+
+def _system() -> str:
+    cities = ", ".join(f'"{name}"' for name in sorted(DESTINATIONS))
+    return SYSTEM.replace("{cities}", cities)
 
 
 def _parse_json(text: str) -> dict | None:
@@ -65,7 +71,7 @@ def chat_turn(message: str, profile: dict | None = None) -> dict:
     """One conversation turn: read the message, update the profile, pick the next question."""
     current = TravellerProfile(**(profile or {}))
     prompt = f"Known so far: {current.model_dump_json()}\nTraveller says: {message}"
-    updates = _parse_json(generate(prompt, system=SYSTEM)) or {}
+    updates = _parse_json(generate(prompt, system=_system())) or {}
     updated = apply_updates(current, updates)
     question = next_question(updated)
     return {

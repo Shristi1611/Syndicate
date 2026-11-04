@@ -215,5 +215,53 @@
     ],
     "patience_rounds": 2,
     "free_cancellation_days": 3
+  },
+  {
+    "id": "S_19",
+    "name": "Crest Air",
+    "personality": "no-frills low-fare airline that guards its headline fare and sells add-ons instead",
+    "floor_ratio": 0.88,
+    "tradeable": [
+      "extra_baggage"
+    ],
+    "patience_rounds": 2,
+    "free_cancellation_days": 2
+  },
+  {
+    "id": "S_20",
+    "name": "Meridian Airways",
+    "personality": "full-service carrier, formal, rarely discounts but will include comforts",
+    "floor_ratio": 0.9,
+    "tradeable": [
+      "extra_baggage",
+      "free_meal",
+      "seat_selection"
+    ],
+    "patience_rounds": 2,
+    "free_cancellation_days": 3
+  },
+  {
+    "id": "S_21",
+    "name": "SkyBridge",
+    "personality": "regional airline that likes to fill seats and offers small perks for early bookings",
+    "floor_ratio": 0.84,
+    "tradeable": [
+      "extra_baggage",
+      "priority_boarding"
+    ],
+    "patience_rounds": 3,
+    "free_cancellation_days": 2
+  },
+  {
+    "id": "S_22",
+    "name": "Indus Wings",
+    "personality": "flexible mid-market airline, friendly and open to bundling comforts",
+    "floor_ratio": 0.8,
+    "tradeable": [
+      "free_meal",
+      "seat_selection"
+    ],
+    "patience_rounds": 3,
+    "free_cancellation_days": 4
   }
 ]

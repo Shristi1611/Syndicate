@@ -3,28 +3,35 @@ import re
 
 from pydantic import ValidationError
 
-from app.inventory import DESTINATIONS
+from app.inventory import DESTINATIONS, HUBS
 from app.llm import generate
-from app.profile import TravellerProfile, next_question
+from app.profile import TravellerProfile, next_question, or_list
 
-FIELDS = {"destination", "nights", "travellers", "budget_total", "stairs_free", "interests"}
+FIELDS = {"destination", "origin", "nights", "travellers", "budget_total", "stairs_free", "interests"}
 
 READY = "Great, I have everything I need. Ready to plan your trip!"
 
-SYSTEM = """Extract trip details from the traveller's message.
-Return one JSON object using only these keys, and only the ones the message clearly states:
-- destination: one of {cities}
-- nights: whole number
-- travellers: whole number of people
-- budget_total: whole number of rupees for the whole trip (60k means 60000)
-- stairs_free: true if anyone cannot climb stairs or needs step-free access
-- interests: list of short lowercase words such as quiet, heritage, food, nightlife
-Leave out any key that is not stated. Output the JSON object and nothing else."""
-
 
 def _system() -> str:
+    """The extraction prompt. The city lists come from the catalogue, never from a fixed list."""
     cities = ", ".join(f'"{name}"' for name in sorted(DESTINATIONS))
-    return SYSTEM.replace("{cities}", cities)
+    lines = [
+        "Extract trip details from the traveller's message.",
+        "Return one JSON object using only these keys, and only the ones the message clearly states:",
+        f"- destination: one of {cities}",
+    ]
+    if HUBS:
+        hubs = ", ".join(f'"{name}"' for name in HUBS)
+        lines.append(f"- origin: the city the traveller is flying from, one of {hubs}")
+    lines += [
+        "- nights: whole number",
+        "- travellers: whole number of people",
+        "- budget_total: whole number of rupees for the whole trip (60k means 60000)",
+        "- stairs_free: true if anyone cannot climb stairs or needs step-free access",
+        "- interests: list of short lowercase words such as quiet, heritage, food, nightlife",
+        "Leave out any key that is not stated. Output the JSON object and nothing else.",
+    ]
+    return "\n".join(lines)
 
 
 def _parse_json(text: str) -> dict | None:
@@ -51,6 +58,12 @@ def apply_updates(profile: TravellerProfile, updates: dict) -> TravellerProfile:
             candidate[key] = value
             if value != data["destination"]:
                 candidate["hotel_id"] = None  # a swapped hotel belongs to the old destination
+            if value == data["origin"]:
+                candidate["origin"] = None    # you cannot fly from where you are going
+        elif key == "origin":
+            if value not in HUBS or value == data["destination"]:
+                continue
+            candidate[key] = value
         elif key == "interests":
             if not isinstance(value, list):
                 continue
@@ -74,8 +87,19 @@ def chat_turn(message: str, profile: dict | None = None) -> dict:
     updates = _parse_json(generate(prompt, system=_system())) or {}
     updated = apply_updates(current, updates)
     question = next_question(updated)
+
+    if question is None:
+        reply = READY
+        if HUBS and not updated.origin:
+            reply += (
+                " If you would like flights included, tell me which city you are flying from "
+                f"({or_list(HUBS)})."
+            )
+    else:
+        reply = question
+
     return {
         "profile": updated.model_dump(),
-        "reply": question or READY,
+        "reply": reply,
         "complete": question is None,
     }

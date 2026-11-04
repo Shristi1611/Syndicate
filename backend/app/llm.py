@@ -1,11 +1,11 @@
 import hashlib
 import json
-import re
 import sqlite3
 import time
 from contextlib import closing
 
 from app.config import ROOT_DIR, settings
+from app.mock_llm import mock as _mock
 
 CACHE_PATH = ROOT_DIR / "data" / "llm_cache.db"  # ignored by git (*.db)
 COOLDOWN_SECONDS = 60  # after a live failure, skip the live model for this long
@@ -26,57 +26,6 @@ def reset() -> None:
 def status() -> dict:
     """How the replies were produced, and whether the live model is currently skipped."""
     return {**stats, "offline": time.monotonic() < _down_until}
-
-
-def _mock(prompt: str, system: str) -> str:
-    """Free, instant, offline stand-in for a real model. Used for testing and as the fallback."""
-    if "Extract trip details" in system:  # profile extraction
-        text = prompt.split("Traveller says:", 1)[-1]
-        out = {}
-        cities = re.search(r"one of (.+?)\n", system)
-        for city in re.findall(r'"([^"]+)"', cities.group(1)) if cities else []:
-            if city.lower() in text.lower():
-                out["destination"] = city
-        m = re.search(r"(\d+)\s*(?:nights?|days?)", text, re.I)
-        if m:
-            out["nights"] = int(m.group(1))
-        m = re.search(r"(\d+)\s*(?:people|persons|travellers|travelers|adults|of us)", text, re.I)
-        if m:
-            out["travellers"] = int(m.group(1))
-        m = re.search(
-            r"(?:₹|\brs\.?\s?)\s*(\d[\d,]*)\s*(k?)|(\d[\d,]*)\s*(k?)\s*(?:rupees|rs\b|budget)",
-            text,
-            re.I,
-        )
-        if m:
-            num = (m.group(1) or m.group(3)).replace(",", "")
-            is_k = (m.group(2) or m.group(4) or "").lower() == "k"
-            out["budget_total"] = int(num) * (1000 if is_k else 1)
-        if re.search(r"stairs|step-free|wheelchair", text, re.I):
-            out["stairs_free"] = True
-        out["interests"] = [
-            w
-            for w in ("quiet", "heritage", "food", "nightlife", "beach", "adventure", "romantic", "luxury")
-            if w in text.lower()
-        ]
-        return json.dumps(out)
-
-    if "Reply with JSON only" in system:  # supplier agent
-        list_price = int(re.search(r"List price: (\d+)", system).group(1))
-        floor = int(re.search(r"lowest price is (\d+)", system).group(1))
-        perks = re.search(r"willing to give: (.+?)\. Offer", system).group(1).split(", ")
-        rnd = int(re.search(r"Negotiation round (\d+)", prompt).group(1))
-        price = max(floor, round(list_price * (1 - 0.07 * rnd), -1))
-        perk = perks[0]
-        message = f"I can do {int(price)} rupees per unit with {perk.replace('_', ' ')} included."
-        return (
-            '{"message": "' + message + '", "price": ' + str(int(price))
-            + ', "perks": ["' + perk + '"]}'
-        )
-
-    # traveller agent
-    target = re.search(r"Ask for (\d+) rupees", prompt).group(1)
-    return f"We would like {target} rupees per unit with the requested perks, please."
 
 
 # ------------------------------------------------------------------ cache

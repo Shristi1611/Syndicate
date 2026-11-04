@@ -1,11 +1,12 @@
 import math
 
-from app.inventory import ACTIVITIES, HOTELS, list_price
-from app.profile import TravellerProfile, missing_fields
+from app.inventory import ACTIVITIES, HOTELS, HUBS, flights_between, list_price
+from app.profile import TravellerProfile, missing_fields, or_list
 
 ROOM_CAPACITY = 3          # assumption: one room sleeps up to 3 people
-HOTEL_BUDGET_SHARE = 0.55  # a hotel should take at most 55% of the total budget
+HOTEL_BUDGET_SHARE = 0.55  # a hotel should take at most 55% of what is left after flights
 MAX_ACTIVITIES = 3
+STOP_PENALTY = 1500        # rupees: a one-stop flight must be this much cheaper to win
 
 
 def _overlap(item: dict, interests: list[str]) -> int:
@@ -39,8 +40,31 @@ def _chosen_hotel(p: TravellerProfile, rooms: int) -> dict:
     return hotel
 
 
+def _pick_flight(flights: list[dict]) -> dict:
+    """Cheapest option, counting a connection as a cost."""
+    return min(flights, key=lambda f: (list_price(f) + STOP_PENALTY * f["stops"], f["id"]))
+
+
+def _flight_line(p: TravellerProfile, notes: list[str]) -> dict | None:
+    """Round-trip flights from the traveller's starting city, or None with a note."""
+    if p.origin == p.destination:
+        raise ValueError("Your starting city and destination are the same.")
+    if p.origin not in HUBS:
+        if not HUBS:
+            raise ValueError("Flights are not available in this catalogue.")
+        raise ValueError(f"I can include flights from {or_list(HUBS)}, not {p.origin}.")
+
+    routes = flights_between(p.origin, p.destination)
+    if not routes:
+        notes.append(
+            f"There are no flights from {p.origin} to {p.destination}; plan to travel by road or rail."
+        )
+        return None
+    return _line(_pick_flight(routes), p.travellers * 2, "person-trip")  # out and back
+
+
 def plan_trip(profile: dict) -> dict:
-    """Pick a hotel, a transfer and a few activities that fit the profile. List prices only."""
+    """Pick a hotel, flights, a transfer and a few activities that fit the profile. List prices only."""
     p = TravellerProfile(**profile)
     missing = missing_fields(p)
     if missing:
@@ -48,6 +72,13 @@ def plan_trip(profile: dict) -> dict:
 
     notes = []
     rooms = math.ceil(p.travellers / ROOM_CAPACITY)
+
+    # --- Flights (optional: only when the traveller says where they are flying from) ---
+    flight = _flight_line(p, notes) if p.origin else None
+    flights_total = flight["total"] if flight else 0
+    if flights_total > p.budget_total:
+        notes.append("The flights alone cost more than your budget.")
+    hotel_budget = max(0, p.budget_total - flights_total)
 
     # --- Hotel ---
     if p.hotel_id:
@@ -64,7 +95,7 @@ def plan_trip(profile: dict) -> dict:
         def hotel_cost(h):
             return list_price(h) * p.nights * rooms
 
-        affordable = [h for h in hotels if hotel_cost(h) <= p.budget_total * HOTEL_BUDGET_SHARE]
+        affordable = [h for h in hotels if hotel_cost(h) <= hotel_budget * HOTEL_BUDGET_SHARE]
         if affordable:
             hotel = max(affordable, key=lambda h: (_overlap(h, p.interests), h["star"], -hotel_cost(h)))
         else:
@@ -73,6 +104,10 @@ def plan_trip(profile: dict) -> dict:
 
     items = [_line(hotel, p.nights * rooms, "room-night")]
     spent = items[0]["total"]
+
+    if flight:
+        items.append(flight)
+        spent += flight["total"]
 
     # --- Airport transfer (arrival + departure, per person) ---
     transfers = [a for a in ACTIVITIES.values()

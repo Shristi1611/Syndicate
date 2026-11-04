@@ -1,8 +1,8 @@
 import json
 
-from app.config import ROOT_DIR
+from app.config import CATALOGUE_DIR
 
-DATA_DIR = ROOT_DIR / "data"
+DATA_DIR = CATALOGUE_DIR
 
 
 def _load(filename: str) -> list[dict]:

@@ -1,11 +1,11 @@
 import json
 
-from app.config import ROOT_DIR
+from app.config import CATALOGUE_DIR
 from app.profile import TravellerProfile
 
 
 def _load() -> dict[str, dict]:
-    raw = json.loads((ROOT_DIR / "data" / "personas.json").read_text(encoding="utf-8"))
+    raw = json.loads((CATALOGUE_DIR / "personas.json").read_text(encoding="utf-8"))
     personas = {}
     for persona in raw:
         # Validated with the same model as live chat, so a bad persona fails at startup.

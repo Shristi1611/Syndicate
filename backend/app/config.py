@@ -16,7 +16,13 @@ class Settings(BaseSettings):
     llm_cache: bool = True             # replay identical prompts from the local cache
     llm_fallback: bool = True          # use the offline mock when the live model fails
 
+    # Folder holding suppliers, hotels, activities and personas (JSON).
+    # Empty means the repo's data/ folder. The tests point this at tests/fixtures.
+    catalogue_dir: str = ""
+
     model_config = SettingsConfigDict(env_file=ROOT_DIR / ".env", extra="ignore")
 
 
 settings = Settings()
+
+CATALOGUE_DIR = Path(settings.catalogue_dir) if settings.catalogue_dir else ROOT_DIR / "data"

@@ -1,0 +1,90 @@
+[
+  {
+    "id": "H_GOA_01",
+    "name": "Palm Cove Resort",
+    "destination": "Goa",
+    "star": 4,
+    "tags": ["quiet", "beachfront", "ground-floor-rooms"],
+    "stairs_free": true,
+    "list_price_per_night": 7000,
+    "rooms_available": 6,
+    "supplier_id": "S_03"
+  },
+  {
+    "id": "H_GOA_02",
+    "name": "Baga Breeze Hotel",
+    "destination": "Goa",
+    "star": 3,
+    "tags": ["lively", "nightlife", "near-beach"],
+    "stairs_free": false,
+    "list_price_per_night": 3800,
+    "rooms_available": 10,
+    "supplier_id": "S_04"
+  },
+  {
+    "id": "H_GOA_03",
+    "name": "Portuguese Heritage Villa",
+    "destination": "Goa",
+    "star": 4,
+    "tags": ["quiet", "heritage", "pool"],
+    "stairs_free": false,
+    "list_price_per_night": 6200,
+    "rooms_available": 4,
+    "supplier_id": "S_02"
+  },
+  {
+    "id": "H_GOA_04",
+    "name": "Coastline Grand",
+    "destination": "Goa",
+    "star": 5,
+    "tags": ["luxury", "beachfront", "spa"],
+    "stairs_free": true,
+    "list_price_per_night": 12500,
+    "rooms_available": 8,
+    "supplier_id": "S_01"
+  },
+  {
+    "id": "H_JAI_01",
+    "name": "Rajmahal Haveli",
+    "destination": "Jaipur",
+    "star": 5,
+    "tags": ["heritage", "luxury", "pool"],
+    "stairs_free": true,
+    "list_price_per_night": 11000,
+    "rooms_available": 5,
+    "supplier_id": "S_02"
+  },
+  {
+    "id": "H_JAI_02",
+    "name": "Pink City Inn",
+    "destination": "Jaipur",
+    "star": 3,
+    "tags": ["budget", "central"],
+    "stairs_free": false,
+    "list_price_per_night": 2800,
+    "rooms_available": 12,
+    "supplier_id": "S_04"
+  },
+  {
+    "id": "H_JAI_03",
+    "name": "Amber View Retreat",
+    "destination": "Jaipur",
+    "star": 4,
+    "tags": ["quiet", "views", "garden"],
+    "stairs_free": true,
+    "list_price_per_night": 6500,
+    "rooms_available": 6,
+    "supplier_id": "S_03"
+  },
+  {
+    "id": "H_JAI_04",
+    "name": "Bazaar Boutique Hotel",
+    "destination": "Jaipur",
+    "star": 4,
+    "tags": ["boutique", "central", "rooftop"],
+    "stairs_free": false,
+    "list_price_per_night": 5200,
+    "rooms_available": 7,
+    "supplier_id": "S_01"
+  }
+]

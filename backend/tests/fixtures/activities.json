@@ -1,0 +1,112 @@
+[
+  {
+    "id": "A_GOA_01",
+    "name": "Old Goa Heritage Walk",
+    "destination": "Goa",
+    "category": "sightseeing",
+    "tags": ["heritage", "quiet", "easy-walking"],
+    "stairs_free": true,
+    "duration_hours": 3,
+    "list_price_per_person": 1200,
+    "supplier_id": "S_05"
+  },
+  {
+    "id": "A_GOA_02",
+    "name": "Spice Plantation Tour with Lunch",
+    "destination": "Goa",
+    "category": "sightseeing",
+    "tags": ["family", "food", "nature", "quiet"],
+    "stairs_free": true,
+    "duration_hours": 5,
+    "list_price_per_person": 1800,
+    "supplier_id": "S_05"
+  },
+  {
+    "id": "A_GOA_03",
+    "name": "Dolphin Spotting Boat Ride",
+    "destination": "Goa",
+    "category": "adventure",
+    "tags": ["lively", "water", "family"],
+    "stairs_free": false,
+    "duration_hours": 2,
+    "list_price_per_person": 1500,
+    "supplier_id": "S_05"
+  },
+  {
+    "id": "A_GOA_04",
+    "name": "Sunset Beach Dinner",
+    "destination": "Goa",
+    "category": "dining",
+    "tags": ["romantic", "quiet", "beachfront"],
+    "stairs_free": true,
+    "duration_hours": 3,
+    "list_price_per_person": 2500,
+    "supplier_id": "S_03"
+  },
+  {
+    "id": "A_GOA_05",
+    "name": "Airport Transfer, Goa",
+    "destination": "Goa",
+    "category": "transfer",
+    "tags": ["private-car"],
+    "stairs_free": true,
+    "duration_hours": 1,
+    "list_price_per_person": 900,
+    "supplier_id": "S_03"
+  },
+  {
+    "id": "A_JAI_01",
+    "name": "Amber Fort Guided Tour",
+    "destination": "Jaipur",
+    "category": "sightseeing",
+    "tags": ["heritage", "history", "crowded"],
+    "stairs_free": false,
+    "duration_hours": 4,
+    "list_price_per_person": 1600,
+    "supplier_id": "S_05"
+  },
+  {
+    "id": "A_JAI_02",
+    "name": "Old City Food Trail",
+    "destination": "Jaipur",
+    "category": "dining",
+    "tags": ["food", "lively", "budget"],
+    "stairs_free": true,
+    "duration_hours": 3,
+    "list_price_per_person": 1100,
+    "supplier_id": "S_05"
+  },
+  {
+    "id": "A_JAI_03",
+    "name": "Private City Palace Evening Visit",
+    "destination": "Jaipur",
+    "category": "sightseeing",
+    "tags": ["heritage", "quiet", "luxury", "romantic"],
+    "stairs_free": true,
+    "duration_hours": 3,
+    "list_price_per_person": 3200,
+    "supplier_id": "S_02"
+  },
+  {
+    "id": "A_JAI_04",
+    "name": "Sunrise Hot Air Balloon",
+    "destination": "Jaipur",
+    "category": "adventure",
+    "tags": ["romantic", "views", "adventure"],
+    "stairs_free": false,
+    "duration_hours": 2,
+    "list_price_per_person": 4500,
+    "supplier_id": "S_05"
+  },
+  {
+    "id": "A_JAI_05",
+    "name": "Airport Transfer, Jaipur",
+    "destination": "Jaipur",
+    "category": "transfer",
+    "tags": ["private-car"],
+    "stairs_free": true,
+    "duration_hours": 1,
+    "list_price_per_person": 800,
+    "supplier_id": "S_02"
+  }
+]

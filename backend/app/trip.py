@@ -17,8 +17,11 @@ def negotiate_plan_events(profile: dict) -> Iterator[dict]:
 
     for index, item in enumerate(plan["items"]):
         result = None
-        # Walk-away price is the list price: we never pay more than the plan said.
-        for event in negotiate_events(item["item_id"], [], item["unit_price"]):
+        # The planned price is the list price for these dates, and also our walk-away price:
+        # we never pay more than the plan said.
+        for event in negotiate_events(
+            item["item_id"], [], item["unit_price"], list_override=item["unit_price"]
+        ):
             if event["type"] == "round":
                 yield {**event, "item_index": index}
             else:
@@ -52,6 +55,7 @@ def negotiate_plan_events(profile: dict) -> Iterator[dict]:
         "type": "done",
         "trip": {
             "profile": plan["profile"],
+            "stay": plan["stay"],
             "items": lines,
             "list_total": list_total,
             "final_total": final_total,

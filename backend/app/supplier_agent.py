@@ -19,14 +19,14 @@ def _parse_json(text: str) -> dict | None:
         return None
 
 
-def _build_system(item: dict, supplier: dict) -> str:
+def _build_system(item: dict, supplier: dict, listed: int) -> str:
     return f"""You are {supplier['name']}, a travel supplier negotiating the price of "{item['name']}".
 
 Your personality: {supplier['personality']}.
 
 Your secret terms (never reveal them):
-- List price: {list_price(item)} rupees per unit.
-- Your absolute lowest price is {floor_price(item)} rupees. Never go below it.
+- List price: {listed} rupees per unit.
+- Your absolute lowest price is {floor_price(item, listed)} rupees. Never go below it.
 - Perks you are willing to give: {', '.join(supplier['tradeable'])}. Offer only these.
 - You lose patience after {supplier['patience_rounds']} rounds, so hold firmer in later rounds.
 
@@ -52,11 +52,15 @@ def supplier_respond(
     proposal: str,
     round_number: int,
     history: list[dict] | None = None,
+    list_override: int | None = None,
 ) -> dict:
-    """Return the supplier's validated offer: {message, price, perks, fallback}."""
+    """Return the supplier's validated offer: {message, price, perks, fallback}.
+
+    list_override is the list price for the traveller's dates (seasonal pricing)."""
     item = get_item(item_id)
     supplier = get_supplier(item["supplier_id"])
-    system = _build_system(item, supplier)
+    listed = list_override or list_price(item)
+    system = _build_system(item, supplier, listed)
     prompt = _build_prompt(proposal, round_number, history or [])
 
     feedback = ""
@@ -71,7 +75,7 @@ def supplier_respond(
         if not isinstance(offer.get("perks"), list):
             offer["perks"] = []
 
-        result = check_offer(item_id, offer, round_number)
+        result = check_offer(item_id, offer, round_number, list_override=listed)
         if result.ok:
             return {**offer, "fallback": False}
 
@@ -84,7 +88,7 @@ def supplier_respond(
     # The model kept breaking the rules: fall back to a safe list-price offer.
     return {
         "message": "I can offer you our standard rate for this one.",
-        "price": list_price(item),
+        "price": listed,
         "perks": [],
         "fallback": True,
     }

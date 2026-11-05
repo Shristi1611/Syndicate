@@ -92,8 +92,11 @@ def _validate(trip: dict, conn: sqlite3.Connection) -> list[str]:
             errors.append(f"{name}: invalid price or perks")
             continue
 
-        # The same Rules Guard that checks every supplier offer checks the final price again.
-        result = check_offer(want["item_id"], {"price": price, "perks": perks}, 1)
+        # The same Rules Guard that checks every supplier offer checks the final price again,
+        # against the list price for the traveller's dates (the season, if they gave dates).
+        result = check_offer(
+            want["item_id"], {"price": price, "perks": perks}, 1, list_override=want["unit_price"]
+        )
         if not result.ok:
             errors.append(f"{name}: " + "; ".join(result.violations))
 
@@ -143,6 +146,7 @@ def create_quote(trip: dict) -> dict:
         "total": total,
         "list_total": expected["list_total"],
         "saved": expected["list_total"] - total,
+        "stay": expected.get("stay"),
         "expires_in": QUOTE_TTL_SECONDS,
         "requires_confirmation": True,
     }

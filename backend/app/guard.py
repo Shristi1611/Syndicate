@@ -11,25 +11,33 @@ class GuardResult:
     violations: list[str] = field(default_factory=list)
 
 
-def check_offer(item_id: str, offer: dict, round_number: int = 1) -> GuardResult:
+def check_offer(
+    item_id: str,
+    offer: dict,
+    round_number: int = 1,
+    list_override: int | None = None,
+) -> GuardResult:
     """Validate a supplier's offer against its hidden terms.
 
     offer looks like: {"price": 5600, "perks": ["airport_transfer"]}
+    list_override is the list price for the traveller's dates (seasonal pricing). Without it,
+    the year-round list price applies.
     """
     item = get_item(item_id)
     if item is None:
         return GuardResult(False, [f"Unknown item: {item_id}"])
 
     supplier = get_supplier(item["supplier_id"])
+    listed = list_override or list_price(item)
     violations = []
 
     price = offer.get("price")
     if not isinstance(price, (int, float)) or price <= 0:
         violations.append("Price must be a positive number")
     else:
-        if price < floor_price(item):
+        if price < floor_price(item, listed):
             violations.append("Price is below the supplier's floor")
-        if price > list_price(item):
+        if price > listed:
             violations.append("Price is above the list price")
 
     for perk in offer.get("perks", []):

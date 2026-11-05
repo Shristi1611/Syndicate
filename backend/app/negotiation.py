@@ -27,14 +27,18 @@ def _traveller_message(item_name: str, target: int, wants: list[str], round_numb
 
 
 def negotiate_events(
-    item_id: str, wants: list[str] | None = None, max_price: int | None = None
+    item_id: str,
+    wants: list[str] | None = None,
+    max_price: int | None = None,
+    list_override: int | None = None,
 ) -> Iterator[dict]:
     """Run a negotiation, yielding each round as it happens, then the final result.
 
     max_price is the traveller's walk-away price per unit.
+    list_override is the list price for the traveller's dates (seasonal pricing).
     """
     item = get_item(item_id)
-    lp = list_price(item)
+    lp = list_override or list_price(item)
     wants = wants or []
     max_price = max_price or lp
 
@@ -46,7 +50,7 @@ def negotiate_events(
 
     for round_number in range(1, MAX_ROUNDS + 1):
         proposal = _traveller_message(item["name"], target, wants, round_number)
-        offer = supplier_respond(item_id, proposal, round_number, history)
+        offer = supplier_respond(item_id, proposal, round_number, history, list_override=list_override)
 
         history.append({"role": "traveller", "message": proposal})
         history.append({"role": "supplier", "message": offer["message"]})
@@ -92,10 +96,15 @@ def negotiate_events(
     }
 
 
-def negotiate(item_id: str, wants: list[str] | None = None, max_price: int | None = None) -> dict:
+def negotiate(
+    item_id: str,
+    wants: list[str] | None = None,
+    max_price: int | None = None,
+    list_override: int | None = None,
+) -> dict:
     """Run a negotiation to the end and return only the final result."""
     result = None
-    for event in negotiate_events(item_id, wants, max_price):
+    for event in negotiate_events(item_id, wants, max_price, list_override):
         if event["type"] == "result":
             result = event["result"]
     return result

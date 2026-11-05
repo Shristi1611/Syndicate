@@ -6,7 +6,7 @@ from contextlib import closing
 
 from app.bookings import _booked_rooms, _connect
 from app.guard import check_offer
-from app.inventory import HOTELS, get_item, list_price
+from app.inventory import FLIGHTS, HOTELS, flights_between, get_item, list_price
 from app.negotiation import negotiate
 
 RAIN_TAGS = {"beachfront", "water", "adventure"}  # activities that heavy rain ruins
@@ -83,7 +83,7 @@ def _rain_affected(trip: dict) -> list[dict]:
     return [
         line
         for line in trip["items"]
-        if line["category"] not in ("hotel", "hotel_extra", "transfer")
+        if line["category"] not in ("hotel", "hotel_extra", "transfer", "flight")
         and (line["category"] == "adventure" or RAIN_TAGS & set(get_item(line["item_id"]).get("tags", [])))
     ]
 
@@ -93,6 +93,12 @@ def _guard(item_id: str, price: int) -> None:
     result = check_offer(item_id, {"price": price, "perks": []}, 1)
     if not result.ok:
         raise ValueError("; ".join(result.violations))
+
+
+def _flight_text(flight: dict) -> str:
+    stops = "non-stop" if flight["stops"] == 0 else "1 stop"
+    hours, minutes = divmod(flight["duration_minutes"], 60)
+    return f"{flight['airline']}, {stops}, {hours}h {minutes:02d}m"
 
 
 # ---------------------------------------------------------------- proposing
@@ -157,7 +163,48 @@ def _heavy_rain(conn: sqlite3.Connection, trip: dict):
     ]
 
 
+def _flight_cancelled_with_flights(trip: dict, line: dict):
+    """The trip includes flights: offer other flights on the same route, or a refund."""
+    current = get_item(line["item_id"])
+    alternatives = [
+        f
+        for f in flights_between(current["origin"], current["destination"])
+        if f["id"] != line["item_id"]
+    ]
+    alternatives.sort(key=lambda f: (list_price(f), f["id"]))
+
+    options = []
+    for alt in alternatives[:MAX_ALTERNATIVES]:
+        unit = _best_price(alt["id"])
+        options.append(
+            _option(
+                f"rebook:{alt['id']}",
+                f"Rebook on {alt['airline']}",
+                unit * line["quantity"] - line["final_total"],
+                new_unit_price=unit,
+                details=(
+                    f"{_flight_text(alt)}, both directions, {unit} rupees per person-trip, negotiated. "
+                    "Your airport pickup moves to the new arrival time at no charge."
+                ),
+            )
+        )
+
+    options.append(
+        _option(
+            "cancel_flight",
+            "Cancel the flights with a full refund",
+            -line["final_total"],
+            details="No cancellation fee, because the airline is at fault. You would arrange your own travel.",
+        )
+    )
+    return [line["name"]], options
+
+
 def _flight_cancelled(conn: sqlite3.Connection, trip: dict):
+    flights = _lines(trip, "flight")
+    if flights:
+        return _flight_cancelled_with_flights(trip, flights[0])
+
     transfers = _lines(trip, "transfer")
     if not transfers:
         raise ValueError("This trip has no airport transfers to change")
@@ -247,6 +294,45 @@ def _change(conn: sqlite3.Connection, booking_id: str, trip: dict, option_id: st
         if not _lines(trip, "transfer"):
             raise ValueError(NO_LONGER_APPLIES)
         trip["items"] = [line for line in items if line["category"] != "transfer"]
+        return
+
+    if option_id == "cancel_flight":
+        if not _lines(trip, "flight"):
+            raise ValueError(NO_LONGER_APPLIES)
+        trip["items"] = [line for line in items if line["category"] != "flight"]
+        return
+
+    if option_id.startswith("rebook:"):
+        flights = _lines(trip, "flight")
+        if not flights:
+            raise ValueError(NO_LONGER_APPLIES)
+        old = flights[0]
+        current = get_item(old["item_id"])
+        new_id = option_id.split(":", 1)[1]
+        new = FLIGHTS.get(new_id)
+        same_route = new is not None and (new["origin"], new["destination"]) == (
+            current["origin"],
+            current["destination"],
+        )
+        if not same_route or new_id == old["item_id"]:
+            raise ValueError(NO_LONGER_APPLIES)
+
+        unit = option["new_unit_price"]
+        _guard(new_id, unit)
+        listed = list_price(new)
+        new_line = {
+            "item_id": new_id,
+            "name": new["name"],
+            "category": "flight",
+            "unit": old["unit"],
+            "unit_price": listed,
+            "quantity": old["quantity"],
+            "total": listed * old["quantity"],
+            "final_unit_price": unit,
+            "final_total": unit * old["quantity"],
+            "perks": [],
+        }
+        trip["items"] = [new_line if line is old else line for line in items]
         return
 
     if option_id == "cancel_hotel":

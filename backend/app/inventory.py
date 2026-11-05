@@ -49,11 +49,15 @@ def flights_between(origin: str, destination: str) -> list[dict]:
 
 
 def list_price(item: dict) -> int:
-    """Public price: per night for hotels, per person for activities and flights."""
+    """Public year-round price: per night for hotels, per person for activities and flights."""
     return item.get("list_price_per_night") or item["list_price_per_person"]
 
 
-def floor_price(item: dict) -> int:
-    """HIDDEN lowest price the supplier accepts. Never show this to the traveller agent."""
+def floor_price(item: dict, list_override: int | None = None) -> int:
+    """HIDDEN lowest price the supplier accepts. Never show this to the traveller agent.
+
+    list_override is the list price for the traveller's dates (seasonal pricing). The floor is
+    always the same share of whichever list price applies."""
     supplier = SUPPLIERS[item["supplier_id"]]
-    return round(list_price(item) * supplier["floor_ratio"])
+    base = list_override if list_override else list_price(item)
+    return round(base * supplier["floor_ratio"])

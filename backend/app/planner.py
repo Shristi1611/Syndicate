@@ -1,5 +1,7 @@
 import math
+from datetime import date
 
+from app import seasons
 from app.inventory import ACTIVITIES, HOTELS, HUBS, flights_between, list_price
 from app.profile import TravellerProfile, missing_fields, or_list
 
@@ -7,14 +9,15 @@ ROOM_CAPACITY = 3          # assumption: one room sleeps up to 3 people
 HOTEL_BUDGET_SHARE = 0.55  # a hotel should take at most 55% of what is left after flights
 MAX_ACTIVITIES = 3
 STOP_PENALTY = 1500        # rupees: a one-stop flight must be this much cheaper to win
+SEASON_NOTE_PCT = 8        # mention the season when hotel rates move by at least this much
 
 
 def _overlap(item: dict, interests: list[str]) -> int:
     return len(set(item.get("tags", [])) & set(interests))
 
 
-def _line(item: dict, quantity: int, unit: str) -> dict:
-    price = list_price(item)
+def _line(item: dict, quantity: int, unit: str, price: int | None = None) -> dict:
+    price = list_price(item) if price is None else price
     return {
         "item_id": item["id"],
         "name": item["name"],
@@ -45,7 +48,7 @@ def _pick_flight(flights: list[dict]) -> dict:
     return min(flights, key=lambda f: (list_price(f) + STOP_PENALTY * f["stops"], f["id"]))
 
 
-def _flight_line(p: TravellerProfile, notes: list[str]) -> dict | None:
+def _flight_line(p: TravellerProfile, notes: list[str], factor: float | None) -> dict | None:
     """Round-trip flights from the traveller's starting city, or None with a note."""
     if p.origin == p.destination:
         raise ValueError("Your starting city and destination are the same.")
@@ -60,11 +63,17 @@ def _flight_line(p: TravellerProfile, notes: list[str]) -> dict | None:
             f"There are no flights from {p.origin} to {p.destination}; plan to travel by road or rail."
         )
         return None
-    return _line(_pick_flight(routes), p.travellers * 2, "person-trip")  # out and back
+
+    chosen = _pick_flight(routes)
+    price = seasons.adjust(list_price(chosen), factor) if factor is not None else list_price(chosen)
+    return _line(chosen, p.travellers * 2, "person-trip", price)  # out and back
 
 
 def plan_trip(profile: dict) -> dict:
-    """Pick a hotel, flights, a transfer and a few activities that fit the profile. List prices only."""
+    """Pick a hotel, flights, a transfer and a few activities that fit the profile.
+
+    Without a start date everything is priced at the year-round list price. With one,
+    hotels and flights follow the season. Tours and transfers stay flat."""
     p = TravellerProfile(**profile)
     missing = missing_fields(p)
     if missing:
@@ -73,8 +82,27 @@ def plan_trip(profile: dict) -> dict:
     notes = []
     rooms = math.ceil(p.travellers / ROOM_CAPACITY)
 
+    # --- Season (only when the traveller gave a start date) ---
+    stay = h_factor = f_factor = None
+    if p.start_date:
+        start = date.fromisoformat(p.start_date)
+        h_factor = seasons.hotel_factor(p.destination, start, p.nights)
+        f_factor = seasons.flight_factor(p.destination, start, p.nights)
+        stay = seasons.stay_info(p.destination, start, p.nights)
+        change = stay["hotel_change_pct"]
+        if abs(change) >= SEASON_NOTE_PCT:
+            direction = "above" if change > 0 else "below"
+            notes.append(
+                f"{stay['season'].capitalize()}: hotel rates for these dates are about "
+                f"{abs(change)}% {direction} the year-round rate."
+            )
+
+    def hotel_price(h: dict) -> int:
+        base = list_price(h)
+        return seasons.adjust(base, h_factor) if h_factor is not None else base
+
     # --- Flights (optional: only when the traveller says where they are flying from) ---
-    flight = _flight_line(p, notes) if p.origin else None
+    flight = _flight_line(p, notes, f_factor) if p.origin else None
     flights_total = flight["total"] if flight else 0
     if flights_total > p.budget_total:
         notes.append("The flights alone cost more than your budget.")
@@ -83,7 +111,7 @@ def plan_trip(profile: dict) -> dict:
     # --- Hotel ---
     if p.hotel_id:
         hotel = _chosen_hotel(p, rooms)
-        if list_price(hotel) * p.nights * rooms > p.budget_total:
+        if hotel_price(hotel) * p.nights * rooms > p.budget_total:
             notes.append(f"{hotel['name']} alone costs more than your budget.")
     else:
         hotels = [h for h in HOTELS.values() if h["destination"] == p.destination]
@@ -92,8 +120,8 @@ def plan_trip(profile: dict) -> dict:
         if not hotels:
             raise ValueError("No hotel matches these needs")
 
-        def hotel_cost(h):
-            return list_price(h) * p.nights * rooms
+        def hotel_cost(h: dict) -> int:
+            return hotel_price(h) * p.nights * rooms
 
         affordable = [h for h in hotels if hotel_cost(h) <= hotel_budget * HOTEL_BUDGET_SHARE]
         if affordable:
@@ -102,7 +130,7 @@ def plan_trip(profile: dict) -> dict:
             hotel = min(hotels, key=hotel_cost)
             notes.append("No hotel fits comfortably in the budget; showing the cheapest option.")
 
-    items = [_line(hotel, p.nights * rooms, "room-night")]
+    items = [_line(hotel, p.nights * rooms, "room-night", hotel_price(hotel))]
     spent = items[0]["total"]
 
     if flight:
@@ -136,6 +164,7 @@ def plan_trip(profile: dict) -> dict:
 
     return {
         "profile": p.model_dump(),
+        "stay": stay,
         "items": items,
         "list_total": spent,
         "budget": p.budget_total,

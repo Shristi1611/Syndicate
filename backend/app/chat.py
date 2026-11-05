@@ -7,9 +7,16 @@ from app.inventory import DESTINATIONS, HUBS
 from app.llm import generate
 from app.profile import TravellerProfile, next_question, or_list
 
-FIELDS = {"destination", "origin", "nights", "travellers", "budget_total", "stairs_free", "interests"}
+FIELDS = {
+    "destination", "origin", "start_date", "nights", "travellers",
+    "budget_total", "stairs_free", "interests",
+}
 
 READY = "Great, I have everything I need. Ready to plan your trip!"
+DATE_HINT = (
+    " If you know your travel dates, tell me the first night (for example 2026-12-20) "
+    "so I can price the season."
+)
 
 
 def _system() -> str:
@@ -24,6 +31,7 @@ def _system() -> str:
         hubs = ", ".join(f'"{name}"' for name in HUBS)
         lines.append(f"- origin: the city the traveller is flying from, one of {hubs}")
     lines += [
+        "- start_date: the first night as YYYY-MM-DD, only when a complete date is given",
         "- nights: whole number",
         "- travellers: whole number of people",
         "- budget_total: whole number of rupees for the whole trip (60k means 60000)",
@@ -71,7 +79,7 @@ def apply_updates(profile: TravellerProfile, updates: dict) -> TravellerProfile:
         elif key == "stairs_free":
             candidate[key] = data[key] or value is True  # once needed, never switched off
         else:
-            candidate[key] = value
+            candidate[key] = value  # start_date, nights, travellers, budget_total: validated below
         try:
             TravellerProfile(**candidate)
         except ValidationError:
@@ -95,6 +103,8 @@ def chat_turn(message: str, profile: dict | None = None) -> dict:
                 " If you would like flights included, tell me which city you are flying from "
                 f"({or_list(HUBS)})."
             )
+        if not updated.start_date:
+            reply += DATE_HINT
     else:
         reply = question
 

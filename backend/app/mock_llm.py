@@ -32,6 +32,10 @@ def _extract_trip(prompt: str, system: str) -> str:
         if city != origin and city.lower() in text.lower():
             out["destination"] = city
 
+    m = re.search(r"\b(\d{4}-\d{2}-\d{2})\b", text)
+    if m:
+        out["start_date"] = m.group(1)
+
     m = re.search(r"(\d+)\s*(?:nights?|days?)", text, re.I)
     if m:
         out["nights"] = int(m.group(1))

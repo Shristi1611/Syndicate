@@ -3,7 +3,9 @@ import sqlite3
 import time
 import uuid
 from contextlib import closing
+from datetime import date
 
+from app import seasons
 from app.bookings import _booked_rooms, _connect
 from app.guard import check_offer
 from app.inventory import FLIGHTS, HOTELS, flights_between, get_item, list_price
@@ -57,10 +59,46 @@ def _option(option_id: str, label: str, cost_delta: int, **extra) -> dict:
     return {"option_id": option_id, "label": label, "cost_delta": cost_delta, **extra}
 
 
-def _best_price(item_id: str) -> int:
-    """Negotiate a new item. We never pay above its list price."""
-    result = negotiate(item_id, [], list_price(get_item(item_id)))
-    return result["deal"]["price"] if result["deal"] else list_price(get_item(item_id))
+# ---------------------------------------------------------- prices for the dates
+
+
+def _start(trip: dict) -> date | None:
+    value = trip["profile"].get("start_date")  # bookings made before dates existed have none
+    return date.fromisoformat(value) if value else None
+
+
+def _hotel_listed(trip: dict, hotel: dict) -> int:
+    """The list price for this trip's dates. Without dates it is the year-round price."""
+    base = list_price(hotel)
+    start = _start(trip)
+    if start is None:
+        return base
+    return seasons.adjust(base, seasons.hotel_factor(hotel["destination"], start, trip["profile"]["nights"]))
+
+
+def _flight_listed(trip: dict, flight: dict) -> int:
+    base = list_price(flight)
+    start = _start(trip)
+    if start is None:
+        return base
+    return seasons.adjust(base, seasons.flight_factor(flight["destination"], start, trip["profile"]["nights"]))
+
+
+def _best_price(item_id: str, listed: int) -> int:
+    """Negotiate a new item against the list price for the traveller's dates.
+    We never pay above that list price."""
+    result = negotiate(item_id, [], listed, list_override=listed)
+    return result["deal"]["price"] if result["deal"] else listed
+
+
+def _guard(item_id: str, price: int, listed: int) -> None:
+    """The same Rules Guard that checks every supplier offer checks every new price."""
+    result = check_offer(item_id, {"price": price, "perks": []}, 1, list_override=listed)
+    if not result.ok:
+        raise ValueError("; ".join(result.violations))
+
+
+# ------------------------------------------------------------------ trip helpers
 
 
 def _lines(trip: dict, category: str) -> list[dict]:
@@ -88,13 +126,6 @@ def _rain_affected(trip: dict) -> list[dict]:
     ]
 
 
-def _guard(item_id: str, price: int) -> None:
-    """The same Rules Guard that checks every supplier offer checks every new price."""
-    result = check_offer(item_id, {"price": price, "perks": []}, 1)
-    if not result.ok:
-        raise ValueError("; ".join(result.violations))
-
-
 def _flight_text(flight: dict) -> str:
     stops = "non-stop" if flight["stops"] == 0 else "1 stop"
     hours, minutes = divmod(flight["duration_minutes"], 60)
@@ -118,11 +149,12 @@ def _hotel_overbooked(conn: sqlite3.Connection, trip: dict):
         and (h["stairs_free"] or not profile["stairs_free"])
         and h["rooms_available"] - _booked_rooms(conn, h["id"]) >= rooms
     ]
-    candidates.sort(key=lambda h: abs(list_price(h) - hotel["unit_price"]))
+    candidates.sort(key=lambda h: abs(_hotel_listed(trip, h) - hotel["unit_price"]))
 
     options = []
     for alt in candidates[:MAX_ALTERNATIVES]:
-        unit = _best_price(alt["id"])
+        listed = _hotel_listed(trip, alt)
+        unit = _best_price(alt["id"], listed)
         delta = unit * hotel["quantity"] - hotel["final_total"]
         options.append(
             _option(
@@ -130,6 +162,7 @@ def _hotel_overbooked(conn: sqlite3.Connection, trip: dict):
                 f"Move to {alt['name']} ({alt['star']} star)",
                 delta,
                 new_unit_price=unit,
+                list_price=listed,
                 details=f"{rooms} room(s) for {profile['nights']} nights at {unit} rupees per night, negotiated",
             )
         )
@@ -171,17 +204,19 @@ def _flight_cancelled_with_flights(trip: dict, line: dict):
         for f in flights_between(current["origin"], current["destination"])
         if f["id"] != line["item_id"]
     ]
-    alternatives.sort(key=lambda f: (list_price(f), f["id"]))
+    alternatives.sort(key=lambda f: (_flight_listed(trip, f), f["id"]))
 
     options = []
     for alt in alternatives[:MAX_ALTERNATIVES]:
-        unit = _best_price(alt["id"])
+        listed = _flight_listed(trip, alt)
+        unit = _best_price(alt["id"], listed)
         options.append(
             _option(
                 f"rebook:{alt['id']}",
                 f"Rebook on {alt['airline']}",
                 unit * line["quantity"] - line["final_total"],
                 new_unit_price=unit,
+                list_price=listed,
                 details=(
                     f"{_flight_text(alt)}, both directions, {unit} rupees per person-trip, negotiated. "
                     "Your airport pickup moves to the new arrival time at no charge."
@@ -211,7 +246,8 @@ def _flight_cancelled(conn: sqlite3.Connection, trip: dict):
 
     hotel = _hotel_line(trip)
     rooms = hotel["quantity"] // trip["profile"]["nights"]
-    unit = _best_price(hotel["item_id"])
+    listed = hotel["unit_price"]  # an extra night costs what the booked stay costs per night
+    unit = _best_price(hotel["item_id"], listed)
 
     return [line["name"] for line in transfers], [
         _option(
@@ -225,6 +261,7 @@ def _flight_cancelled(conn: sqlite3.Connection, trip: dict):
             "Reschedule the pickup and add one extra hotel night",
             unit * rooms,
             new_unit_price=unit,
+            list_price=listed,
             details=f"{rooms} room(s) at {unit} rupees for the night, negotiated, so you do not lose a night.",
         ),
         _option(
@@ -318,8 +355,8 @@ def _change(conn: sqlite3.Connection, booking_id: str, trip: dict, option_id: st
             raise ValueError(NO_LONGER_APPLIES)
 
         unit = option["new_unit_price"]
-        _guard(new_id, unit)
-        listed = list_price(new)
+        listed = _flight_listed(trip, new)
+        _guard(new_id, unit, listed)
         new_line = {
             "item_id": new_id,
             "name": new["name"],
@@ -348,8 +385,8 @@ def _change(conn: sqlite3.Connection, booking_id: str, trip: dict, option_id: st
         hotel = _hotel_line(trip)
         rooms = hotel["quantity"] // nights
         unit = option["new_unit_price"]
-        _guard(hotel["item_id"], unit)
-        listed = list_price(get_item(hotel["item_id"]))
+        listed = hotel["unit_price"]
+        _guard(hotel["item_id"], unit, listed)
         items.append(
             {
                 "item_id": hotel["item_id"],
@@ -380,8 +417,8 @@ def _change(conn: sqlite3.Connection, booking_id: str, trip: dict, option_id: st
             raise ValueError(f"{new['name']} no longer has enough rooms")
 
         unit = option["new_unit_price"]
-        _guard(new_id, unit)
-        listed = list_price(new)
+        listed = _hotel_listed(trip, new)
+        _guard(new_id, unit, listed)
         new_line = {
             "item_id": new_id,
             "name": new["name"],

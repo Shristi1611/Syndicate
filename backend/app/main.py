@@ -1,11 +1,13 @@
 import json
 import time
+from datetime import date
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
+from app import market
 from app.bookings import confirm_quote, create_quote, get_booking
 from app.chat import chat_turn
 from app.config import settings
@@ -28,6 +30,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+MARKET_OFF = "The market simulation is switched off. Set MARKET_ENABLED=true in .env and restart the server."
 
 
 class NegotiateRequest(BaseModel):
@@ -64,6 +68,11 @@ class DisruptionRequest(BaseModel):
 class ApplyRequest(BaseModel):
     proposal_id: str = Field(min_length=1, max_length=40)
     option_id: str = Field(min_length=1, max_length=60)
+
+
+class ShockRequest(BaseModel):
+    destination: str = Field(min_length=1, max_length=40)
+    kind: str = Field(min_length=1, max_length=20)
 
 
 @app.get("/health")
@@ -120,6 +129,48 @@ def hotels(destination: str | None = None):
         for h in HOTELS.values()
         if destination is None or h["destination"] == destination
     ]
+
+
+@app.get("/availability/{hotel_id}")
+def availability(hotel_id: str, start_date: str, nights: int = Query(default=1, ge=1, le=30)):
+    """Free rooms night by night, and how full the hotel is, for the traveller's dates."""
+    hotel = HOTELS.get(hotel_id)
+    if hotel is None:
+        raise HTTPException(status_code=404, detail=f"Unknown hotel: {hotel_id}")
+    try:
+        start = date.fromisoformat(start_date)
+    except ValueError:
+        raise HTTPException(status_code=422, detail="start_date must be a real date like 2026-12-20")
+    return market.availability(hotel, start, nights)
+
+
+@app.get("/market")
+def market_state():
+    """Whether the market simulation is on, and which demand shocks are active."""
+    return market.state()
+
+
+@app.post("/market/shock")
+def market_shock(req: ShockRequest):
+    """Demo control: make a destination busier (surge) or quieter (slump)."""
+    if not settings.market_enabled:
+        raise HTTPException(status_code=409, detail=MARKET_OFF)
+    try:
+        market.set_shock(req.destination, req.kind)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    return market.state()
+
+
+@app.post("/market/reset")
+def market_reset():
+    """Demo control: clear every demand shock."""
+    if not settings.market_enabled:
+        raise HTTPException(status_code=409, detail=MARKET_OFF)
+    market.clear_shocks()
+    return market.state()
 
 
 @app.get("/personas")

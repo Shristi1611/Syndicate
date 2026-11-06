@@ -16,6 +16,7 @@ from app.negotiation import negotiate
 from app.personas import get_persona, list_personas
 from app.planner import plan_trip
 from app.postbooking import cancel_confirm, cancel_preview
+from app.seasons import calendar as season_calendar
 from app.trip import negotiate_plan, negotiate_plan_events
 
 app = FastAPI(title="Syndicate", version="0.1.0")
@@ -93,6 +94,14 @@ def items():
 def destinations():
     """Every city a trip can be planned for, with its region, tagline and coordinates."""
     return list(DESTINATIONS.values())
+
+
+@app.get("/seasons/{destination}")
+def seasons_for(destination: str):
+    """Twelve months of price levels and the holiday windows, for a price calendar."""
+    if destination not in DESTINATIONS:
+        raise HTTPException(status_code=404, detail=f"Unknown destination: {destination}")
+    return season_calendar(destination)
 
 
 @app.get("/hotels")

@@ -3,8 +3,10 @@ import sqlite3
 import time
 import uuid
 from contextlib import closing
+from datetime import date
 
-from app.config import ROOT_DIR
+from app import market
+from app.config import ROOT_DIR, settings
 from app.guard import check_offer
 from app.inventory import get_item
 from app.planner import plan_trip
@@ -45,6 +47,12 @@ def _init() -> None:
                 rooms INTEGER NOT NULL,
                 status TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS market_shocks (
+                destination TEXT PRIMARY KEY,
+                kind TEXT NOT NULL,
+                level REAL NOT NULL,
+                created REAL NOT NULL
+            );
             """
         )
         conn.commit()
@@ -72,8 +80,15 @@ def _validate(trip: dict, conn: sqlite3.Connection) -> list[str]:
     except (ValueError, TypeError) as exc:
         return [f"Invalid profile: {exc}"]
 
+    # With the market simulation on, dated trips are checked against the live market.
+    first_night = expected["profile"].get("start_date")
+    snap = market.snapshot() if settings.market_enabled and first_night else None
+    start = date.fromisoformat(first_night) if snap else None
+
     sent = trip.get("items", [])
     if [i.get("item_id") for i in sent] != [i["item_id"] for i in expected["items"]]:
+        if snap:
+            return ["Availability or prices changed since this trip was planned. Please plan it again."]
         return ["Items do not match the plan for this profile"]
 
     nights = expected["profile"]["nights"]
@@ -83,7 +98,10 @@ def _validate(trip: dict, conn: sqlite3.Connection) -> list[str]:
         name = want["name"]
 
         if got.get("quantity") != want["quantity"] or got.get("unit_price") != want["unit_price"]:
-            errors.append(f"{name}: quantity or list price was changed")
+            if snap:
+                errors.append(f"{name}: availability or prices changed since this trip was planned. Please plan it again.")
+            else:
+                errors.append(f"{name}: quantity or list price was changed")
             continue
 
         price = got.get("final_unit_price")
@@ -103,7 +121,10 @@ def _validate(trip: dict, conn: sqlite3.Connection) -> list[str]:
         item = get_item(want["item_id"])
         if "rooms_available" in item:
             rooms = want["quantity"] // nights
-            free = item["rooms_available"] - _booked_rooms(conn, want["item_id"])
+            if snap:
+                free = snap.free_rooms(item, start, nights)
+            else:
+                free = item["rooms_available"] - _booked_rooms(conn, want["item_id"])
             if rooms > free:
                 errors.append(f"{name}: only {max(free, 0)} room(s) left")
 
@@ -196,7 +217,7 @@ def confirm_quote(quote_id: str) -> dict:
                 raise ValueError("This quote has expired. Please request a new one.")
 
             trip = json.loads(row["trip"])
-            errors = _validate(trip, conn)  # stock may have changed since the quote
+            errors = _validate(trip, conn)  # stock and prices may have changed since the quote
             if errors:
                 raise ValueError("; ".join(errors))
 

@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     # Empty means the repo's data/ folder. The tests point this at tests/fixtures.
     catalogue_dir: str = ""
 
+    # The simulated market: other travellers fill rooms, prices follow demand.
+    # Off by default. It only applies to trips that have a start date.
+    market_enabled: bool = False
+    market_seed: int = 2026
+
     model_config = SettingsConfigDict(env_file=ROOT_DIR / ".env", extra="ignore")
 
 

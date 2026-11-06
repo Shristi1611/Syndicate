@@ -14,6 +14,11 @@ FLIGHT_SENSITIVITY = 0.6  # flights move less with the season than hotels do
 
 FLAT = [1.0] * 12
 
+MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]
+
 # Price level for each month, January first.
 MONTHLY = {
     "Delhi": [1.05, 1.10, 1.00, 0.90, 0.80, 0.75, 0.80, 0.85, 0.90, 1.05, 1.15, 1.15],
@@ -118,5 +123,48 @@ def stay_info(destination: str, start: date, nights: int) -> dict:
         "hotel_factor": round(factor, 3),
         "hotel_change_pct": round((factor - 1) * 100),
         "season": label(factor),
+        "events": events,
+    }
+
+
+def _window(start: tuple[int, int], end: tuple[int, int]) -> str:
+    return f"{start[1]} {MONTH_NAMES[start[0] - 1][:3]} to {end[1]} {MONTH_NAMES[end[0] - 1][:3]}"
+
+
+def calendar(destination: str) -> dict:
+    """Twelve months of price levels plus the holiday windows, for the price calendar."""
+    levels = MONTHLY.get(destination, FLAT)
+    months = [
+        {
+            "month": number,
+            "name": MONTH_NAMES[number - 1],
+            "factor": factor,
+            "change_pct": round((factor - 1) * 100),
+            "season": label(factor),
+        }
+        for number, factor in enumerate(levels, start=1)
+    ]
+
+    events = [
+        {"name": name, "factor": factor, "window": _window(start, end), "repeats": "every year"}
+        for start, end, factor, name in YEARLY_EVENTS
+    ]
+    events += [
+        {
+            "name": name,
+            "factor": factor,
+            "window": f"{start.day} {MONTH_NAMES[start.month - 1][:3]} {start.year} to "
+                      f"{end.day} {MONTH_NAMES[end.month - 1][:3]} {end.year}",
+            "repeats": "one-off",
+        }
+        for start, end, factor, name in DATED_EVENTS
+    ]
+
+    return {
+        "destination": destination,
+        "months": months,
+        "cheapest_month": min(months, key=lambda m: m["factor"])["name"],
+        "busiest_month": max(months, key=lambda m: m["factor"])["name"],
+        "weekend_premium_pct": 0 if _is_hub(destination) else round((WEEKEND_PREMIUM - 1) * 100),
         "events": events,
     }

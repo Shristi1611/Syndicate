@@ -1,0 +1,46 @@
+.dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  width: 19px;
+  height: 19px;
+  margin: -9.5px 0 0 -9.5px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: rgba(214, 212, 209, 0.9);
+  mix-blend-mode: difference;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, width 0.35s ease, height 0.35s ease, margin 0.35s ease,
+    background 0.35s ease, border-color 0.35s ease;
+}
+
+.dot.is-visible {
+  opacity: 1;
+}
+
+.dot.wide {
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  background: rgba(244, 242, 239, 0.14);
+  border-color: rgba(244, 242, 239, 0.75);
+}
+
+/* Hide the system cursor only where our own dot replaces it. */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body,
+  button,
+  a,
+  .card {
+    cursor: none !important;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .dot {
+    display: none;
+  }
+}

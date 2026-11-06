@@ -1,0 +1,96 @@
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 26px;
+  background: #000;
+  transition: opacity 0.6s ease;
+}
+
+.splash.out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.splash-mark {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(28px, 4.4vw, 52px);
+  letter-spacing: 0.005em;
+  color: var(--ink);
+  opacity: 0;
+  animation: riseIn 1.25s ease 0.15s forwards;
+}
+
+.splash-mark em {
+  font-style: normal;
+}
+
+.splash-bar {
+  width: clamp(120px, 17vw, 210px);
+  height: 1px;
+  background: rgba(244, 242, 239, 0.16);
+}
+
+.splash-bar s {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s ease;
+}
+
+.splash-tag {
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(244, 242, 239, 0.38);
+  opacity: 0;
+  animation: riseIn 0.9s ease 0.7s forwards;
+}
+
+.splash-error {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  max-width: min(420px, 86vw);
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--dim);
+}
+
+.splash-error p {
+  margin: 0;
+}
+
+.splash-error button {
+  min-height: 44px;
+  padding: 10px 22px;
+  border: 1px solid rgba(244, 242, 239, 0.4);
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.splash-error button:hover {
+  border-color: #fff;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

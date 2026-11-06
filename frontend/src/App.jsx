@@ -1,27 +1,22 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
+import Cursor from "./components/Cursor.jsx";
+import Sphere from "./components/Sphere.jsx";
 import Splash from "./components/Splash.jsx";
 import "./App.css";
 
 export default function App() {
   const [data, setData] = useState(null);
 
-  if (!data) {
-    return <Splash onDone={setData} />;
-  }
+  // Stable function, so the sphere is not rebuilt on every render.
+  const pick = useCallback((destination) => {
+    console.log("Picked", destination.name); // the next step opens the destination from here
+  }, []);
 
-  // Placeholder home: proves the splash loaded real data. The sphere replaces this next.
   return (
-    <main className="home">
-      <h1 className="home-mark">
-        Synd<em>icate</em>
-      </h1>
-      <p className="home-line">
-        {data.destinations.length} destinations · {data.hotels.length} hotels · {data.personas.length} travellers
-      </p>
-      <p className="home-sub">
-        Backend connected · model: {data.health.llm_provider}
-      </p>
-    </main>
+    <>
+      <Cursor />
+      {data ? <Sphere destinations={data.destinations} onPick={pick} /> : <Splash onDone={setData} />}
+    </>
   );
 }

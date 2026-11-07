@@ -19,6 +19,7 @@ from app.personas import get_persona, list_personas
 from app.planner import plan_trip
 from app.postbooking import cancel_confirm, cancel_preview
 from app.seasons import calendar as season_calendar
+from app.states import states_with_cities
 from app.trip import negotiate_plan, negotiate_plan_events
 
 app = FastAPI(title="Syndicate", version="0.1.0")
@@ -103,6 +104,13 @@ def items():
 def destinations():
     """Every city a trip can be planned for, with its region, tagline and coordinates."""
     return list(DESTINATIONS.values())
+
+
+@app.get("/states")
+def states():
+    """The states and union territories that have destinations, with a marker position for
+    the globe and the cities inside each one."""
+    return states_with_cities(DESTINATIONS)
 
 
 @app.get("/seasons/{destination}")

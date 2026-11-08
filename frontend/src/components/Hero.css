@@ -1,0 +1,97 @@
+/* A tall track gives us scroll distance. The pinned screen stays put while the track moves. */
+.journey {
+  position: relative;
+  height: 420vh;
+}
+
+.journey-still {
+  height: 100vh;
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+.earth {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(100vw, 100dvh);
+  height: min(100vw, 100dvh);
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.wordmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(48px, 10vw, 150px);
+  letter-spacing: 0.005em;
+  color: #fff;
+  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  will-change: transform, opacity, filter;
+}
+
+.wordmark em {
+  font-style: normal;
+}
+
+.cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--pad) + var(--safe-bottom) + 4px);
+  z-index: 2;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(244, 242, 239, 0.5);
+  pointer-events: none;
+}
+
+.cue s {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(244, 242, 239, 0.28);
+  text-decoration: none;
+}
+
+.cue s::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: translateX(-100%);
+  animation: sweep 2.6s ease infinite;
+}
+
+@keyframes sweep {
+  55% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

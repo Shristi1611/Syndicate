@@ -1,14 +1,15 @@
 /* A tall track gives us scroll distance. The pinned screen stays put while the track moves. */
 .journey {
   position: relative;
-  height: 420vh;
+  height: 520vh;
 }
 
 .journey-still {
   height: 100vh;
 }
 
-.pin {
+.screen {
+  --v: min(100vw, 100dvh); /* the biggest square that fits the screen */
   position: sticky;
   top: 0;
   height: 100vh;
@@ -17,13 +18,24 @@
   background: #000;
 }
 
-.earth {
+/* The video and the drawn map share one square, so a point on the video and the same point on the
+   map are always in the same place. The whole square is what zooms. */
+.map-stage {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(100vw, 100dvh);
-  height: min(100vw, 100dvh);
-  transform: translate(-50%, -50%);
+  width: var(--v);
+  height: var(--v);
+  margin: calc(var(--v) / -2) 0 0 calc(var(--v) / -2);
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.earth {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   pointer-events: none;
   user-select: none;
@@ -52,20 +64,29 @@
   font-style: normal;
 }
 
-.cue {
+.cue,
+.hint {
   position: absolute;
   left: 50%;
   bottom: calc(var(--pad) + var(--safe-bottom) + 4px);
   z-index: 2;
   transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 10px;
   font-size: 10px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: rgba(244, 242, 239, 0.5);
   pointer-events: none;
+  white-space: nowrap;
+}
+
+.cue {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hint {
+  opacity: 0;
 }
 
 .cue s {

@@ -34,7 +34,9 @@
   body,
   button,
   a,
-  .card {
+  [data-hover],
+  .state-card,
+  .map-pin {
     cursor: none !important;
   }
 }

@@ -25,7 +25,7 @@ export default function Cursor() {
         seen = true;
         dot.classList.add("is-visible");
       }
-      dot.classList.toggle("wide", Boolean(e.target.closest(".card, a, button")));
+      dot.classList.toggle("wide", Boolean(e.target.closest("a, button, [data-hover]")));
     };
     const onLeave = () => dot.classList.remove("is-visible");
     const onEnter = () => seen && dot.classList.add("is-visible");

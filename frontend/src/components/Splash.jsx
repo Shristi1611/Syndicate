@@ -7,6 +7,7 @@ import "./Splash.css";
 const TASKS = [
   ["health", "/health"],
   ["destinations", "/destinations"],
+  ["states", "/states"],
   ["hotels", "/hotels"],
   ["personas", "/personas"],
 ];
